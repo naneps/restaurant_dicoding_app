@@ -32,7 +32,9 @@ class RestaurantProvider extends ChangeNotifier {
 
   bool _showFieldReview = false;
   TextEditingController reviewController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
   bool get isSearching => _isSearching;
+
   bool get showFieldReview => _showFieldReview;
 
   RestaurantState get state => _restaurantState;

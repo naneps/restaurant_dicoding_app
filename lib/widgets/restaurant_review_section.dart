@@ -32,29 +32,40 @@ class RestaurantReviewSection extends StatelessWidget {
             Row(
               children: [
                 Expanded(
-                  child: TextField(
-                    controller: provider.reviewController,
-                    maxLines: 5,
-                    minLines: 1,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      hintText: 'Write your review',
-                      constraints: const BoxConstraints(minHeight: 50),
-                      contentPadding: const EdgeInsets.all(10),
-                      suffixIconColor: Theme.of(context).colorScheme.primary,
-                      suffixIcon: IconButton(
-                        style: IconButton.styleFrom(
-                          minimumSize: const Size(0, 0),
-                          fixedSize: const Size(20, 20),
-                          backgroundColor: Colors.transparent,
+                  child: Form(
+                    key: provider.formKey,
+                    child: TextFormField(
+                      controller: provider.reviewController,
+                      maxLines: 5,
+                      minLines: 1,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter some text';
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
                         ),
-                        padding: const EdgeInsets.all(0),
-                        icon: const Icon(Icons.send),
-                        onPressed: () {
-                          provider.addReview(id: restaurant.id!);
-                        },
+                        hintText: 'Write your review',
+                        constraints: const BoxConstraints(minHeight: 50),
+                        contentPadding: const EdgeInsets.all(10),
+                        suffixIconColor: Theme.of(context).colorScheme.primary,
+                        suffixIcon: IconButton(
+                          style: IconButton.styleFrom(
+                            minimumSize: const Size(0, 0),
+                            fixedSize: const Size(20, 20),
+                            backgroundColor: Colors.transparent,
+                          ),
+                          padding: const EdgeInsets.all(0),
+                          icon: const Icon(Icons.send),
+                          onPressed: () {
+                            if (provider.formKey.currentState!.validate()) {
+                              provider.addReview(id: restaurant.id!);
+                            }
+                          },
+                        ),
                       ),
                     ),
                   ),
