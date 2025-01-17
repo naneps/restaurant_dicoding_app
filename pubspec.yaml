@@ -7,16 +7,23 @@ environment:
   sdk: ^3.6.1
 
 dependencies:
+  expandable_text: ^2.3.0
   flutter:
     sdk: flutter
   google_fonts: ^6.2.1
   http: ^1.2.2
+  lottie: ^3.3.1
   provider: ^6.1.2
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
+flutter_test:
+  sdk: flutter
   flutter_lints: ^5.0.0
+
 
 flutter:
   uses-material-design: true
+  assets:
+  - assets/images/
+  - assets/lottie/
+

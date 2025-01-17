@@ -13,11 +13,6 @@ class RestaurantService extends ApiService {
 
   Future<http.Response> getRestaurant(String id) => get('/detail/$id');
   Future<http.Response> getRestaurants() => get('/list');
-
-  Future<http.Response> getRestaurantsByCity(String city) {
-    return get(
-      '/list',
-      queryParameters: {'city': city},
-    );
-  }
+  Future<http.Response> searchRestaurants(String value) =>
+      get('/search', queryParameters: {'q': value});
 }

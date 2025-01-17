@@ -40,14 +40,14 @@ class ApiService {
   Future<http.Response> post(
     String endpoint, {
     Map<String, String>? headers,
-    dynamic body,
+    Map<String, dynamic>? body,
     Map<String, dynamic>? queryParameters,
   }) async {
     return await _handleRequest(
       () => http.post(
         _buildUri(endpoint, queryParameters),
         headers: _mergeHeaders(headers),
-        body: jsonEncode(body),
+        body: body,
       ),
     );
   }

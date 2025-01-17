@@ -5,6 +5,18 @@ class EmptyDataWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Column(
+      children: [
+        Image.asset(
+          "assets/images/cafe.png",
+          height: 150,
+        ),
+        Text(
+          "No Data Found",
+          style: Theme.of(context).textTheme.headlineMedium,
+          textAlign: TextAlign.center,
+        ),
+      ],
+    );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:restaurant_dicoding_app/constants/app_routes.dart';
+import 'package:restaurant_dicoding_app/widgets/loading_widget.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -11,9 +12,7 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(child: CircularProgressIndicator.adaptive()),
-    );
+    return Scaffold(body: LoadingWidget());
   }
 
   @override

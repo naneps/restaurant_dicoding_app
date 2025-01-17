@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:restaurant_dicoding_app/constants/app_constants.dart';
 import 'package:restaurant_dicoding_app/constants/app_routes.dart';
 import 'package:restaurant_dicoding_app/models/restaurant.model.dart';
+import 'package:restaurant_dicoding_app/widgets/loading_image_widget.dart';
 
 class RestaurantGridItem extends StatelessWidget {
   final RestaurantModel restaurant;
@@ -16,7 +17,7 @@ class RestaurantGridItem extends StatelessWidget {
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: Theme.of(context).cardColor,
+        color: Theme.of(context).colorScheme.surfaceContainer,
         border: Border.all(color: Colors.grey.shade300),
       ),
       child: Column(
@@ -48,6 +49,10 @@ class RestaurantGridItem extends StatelessWidget {
                       child: Image.network(
                         "$restaurantSmallImageUrl${restaurant.pictureId}",
                         fit: BoxFit.fill,
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return LoadingImageWidget();
+                        },
                       ),
                     ),
                   ),
@@ -107,15 +112,9 @@ class RestaurantGridItem extends StatelessWidget {
               Expanded(
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).primaryColor,
-                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
                     minimumSize: Size(MediaQuery.of(context).size.width, 20),
                     fixedSize: Size(MediaQuery.of(context).size.width, 30),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
                     padding: const EdgeInsets.all(0),
-                    visualDensity: VisualDensity.compact,
                   ),
                   child: const Text('View Details'),
                   onPressed: () {

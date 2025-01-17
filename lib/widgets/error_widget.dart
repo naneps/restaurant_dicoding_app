@@ -5,9 +5,23 @@ class ErrorStateWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
       child: Column(
-        children: [],
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        spacing: 10,
+        children: [
+          Image.asset(
+            "assets/images/error.png",
+            height: 150,
+          ),
+          Text(
+            "OOPS! Something went wrong",
+            style: Theme.of(context).textTheme.headlineMedium,
+            textAlign: TextAlign.center,
+          ),
+        ],
       ),
     );
   }
