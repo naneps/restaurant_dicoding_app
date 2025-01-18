@@ -44,25 +44,23 @@ class RestaurantMenuSection extends StatelessWidget {
       );
     }
 
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10),
-        child: ListView(
-          //   spacing: 10,
-          //   crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildMenuSection(
-              title: "Foods (${restaurant.menus!.foods!.length})",
-              icon: Icons.fastfood,
-              items: restaurant.menus!.foods!,
-            ),
-            _buildMenuSection(
-              title: "Drinks (${restaurant.menus!.drinks!.length})",
-              icon: Icons.local_drink,
-              items: restaurant.menus!.drinks!,
-            ),
-          ],
-        ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: ListView(
+        //   spacing: 10,
+        //   crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildMenuSection(
+            title: "Foods (${restaurant.menus!.foods!.length})",
+            icon: Icons.fastfood,
+            items: restaurant.menus!.foods!,
+          ),
+          _buildMenuSection(
+            title: "Drinks (${restaurant.menus!.drinks!.length})",
+            icon: Icons.local_drink,
+            items: restaurant.menus!.drinks!,
+          ),
+        ],
       ),
     );
   }
