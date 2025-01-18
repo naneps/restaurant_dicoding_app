@@ -31,9 +31,11 @@ class RestaurantProvider extends ChangeNotifier {
   Timer? _debounce;
 
   bool _showFieldReview = false;
+  bool _isSendingReview = false;
   TextEditingController reviewController = TextEditingController();
   final formKey = GlobalKey<FormState>();
   bool get isSearching => _isSearching;
+  bool get isSendingReview => _isSendingReview;
 
   bool get showFieldReview => _showFieldReview;
 
@@ -41,40 +43,46 @@ class RestaurantProvider extends ChangeNotifier {
 
   Future<void> addReview({required String id}) async {
     try {
+      _isSendingReview = true;
+      notifyListeners();
       await repo.addReview(
-          id: id, name: "Nannnde", review: reviewController.text);
-      getRestaurant(id);
-      reviewController.clear();
+        id: id,
+        name: "Ahmad",
+        review: reviewController.text,
+      );
     } catch (e) {
       print("ERROR ADD REVIEW: $e");
       throw Exception('Request failed: $e');
+    } finally {
+      Future.delayed(const Duration(milliseconds: 1000), () {
+        _isSendingReview = false;
+        reviewController.clear();
+        getRestaurant(id);
+      });
     }
-  }
-
-  void clear() {
-    _restaurantState = RestaurantLoadingState();
-    notifyListeners();
   }
 
   @override
   void dispose() {
     _debounce?.cancel();
     super.dispose();
-    clear();
   }
 
-  void getRestaurant(String id) async {
+  Future<void> getRestaurant(String id) async {
     try {
-      final result = await repo.getRestaurant(id);
-      if (result == null) {
-        _restaurantState = RestaurantEmptyState();
-      } else {
-        _restaurantState = RestaurantLoadedDetailState(result);
-      }
+      Future.delayed(const Duration(milliseconds: 500), () async {
+        final result = await repo.getRestaurant(id);
+        if (result == null) {
+          _restaurantState = RestaurantEmptyState();
+        } else {
+          _restaurantState = RestaurantLoadedDetailState(result);
+        }
+      });
+      Future.delayed(const Duration(milliseconds: 1500), () {
+        notifyListeners();
+      });
     } catch (e) {
       _restaurantState = RestaurantErrorState('Failed to fetch restaurant: $e');
-    } finally {
-      notifyListeners();
     }
   }
 
@@ -87,10 +95,13 @@ class RestaurantProvider extends ChangeNotifier {
         _restaurantState = RestaurantLoadedState(result);
       }
     } catch (e) {
-      _restaurantState =
-          RestaurantErrorState('Failed to fetch restaurants: $e');
+      _restaurantState = RestaurantErrorState(
+        'Failed to fetch restaurants: $e',
+      );
     } finally {
-      notifyListeners();
+      Future.delayed(const Duration(milliseconds: 1500), () {
+        notifyListeners();
+      });
     }
   }
 
@@ -101,14 +112,15 @@ class RestaurantProvider extends ChangeNotifier {
   }
 
   void searchRestaurants(String value) async {
-    // Cancel previous debounce if any
+    _restaurantState = RestaurantLoadingState();
+    notifyListeners();
+    _isSearching = true;
+
     _debounce?.cancel();
 
-    // Set a new debounce with delay
     _debounce = Timer(const Duration(milliseconds: 500), () async {
       try {
         final result = await repo.searchRestaurants(value);
-        _isSearching = true;
 
         if (result == null || result.isEmpty) {
           _restaurantState = RestaurantEmptyState();
@@ -119,12 +131,13 @@ class RestaurantProvider extends ChangeNotifier {
         if (value.isEmpty) {
           _isSearching = false;
         }
-
-        notifyListeners();
       } catch (e) {
         _restaurantState =
             RestaurantErrorState('Failed to fetch restaurants: $e');
-        notifyListeners();
+      } finally {
+        Future.delayed(const Duration(milliseconds: 500), () {
+          notifyListeners();
+        });
       }
     });
   }

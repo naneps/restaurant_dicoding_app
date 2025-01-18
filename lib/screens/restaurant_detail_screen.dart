@@ -6,6 +6,7 @@ import 'package:restaurant_dicoding_app/models/restaurant.model.dart';
 import 'package:restaurant_dicoding_app/models/restaurant_item.model.dart';
 import 'package:restaurant_dicoding_app/providers/restaurant.provider.dart';
 import 'package:restaurant_dicoding_app/widgets/error_widget.dart';
+import 'package:restaurant_dicoding_app/widgets/field_review.dart';
 import 'package:restaurant_dicoding_app/widgets/loading_image_widget.dart';
 import 'package:restaurant_dicoding_app/widgets/loading_widget.dart';
 
@@ -41,25 +42,30 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
             )
           ],
         ),
-        body: SafeArea(
-          child: Hero(
-            tag: widget.id,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: Consumer<RestaurantProvider>(
-                builder: (context, provider, child) {
-                  if (provider.state is RestaurantLoadingState) {
-                    return LoadingWidget();
-                  } else if (provider.state is RestaurantLoadedDetailState) {
-                    final restaurant =
-                        (provider.state as RestaurantLoadedDetailState)
-                            .restaurant;
-                    return _buildContent(restaurant, context);
-                  } else if (provider.state is RestaurantErrorState) {
-                    return ErrorStateWidget();
-                  }
-                  return SizedBox.shrink();
-                },
+        body: RefreshIndicator.adaptive(
+          onRefresh: () async {
+            await context.read<RestaurantProvider>().getRestaurant(widget.id);
+          },
+          child: SafeArea(
+            child: Hero(
+              tag: widget.id,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Consumer<RestaurantProvider>(
+                  builder: (context, provider, child) {
+                    if (provider.state is RestaurantLoadingState) {
+                      return LoadingWidget();
+                    } else if (provider.state is RestaurantLoadedDetailState) {
+                      final restaurant =
+                          (provider.state as RestaurantLoadedDetailState)
+                              .restaurant;
+                      return _buildContent(restaurant, context);
+                    } else if (provider.state is RestaurantErrorState) {
+                      return ErrorStateWidget();
+                    }
+                    return SizedBox.shrink();
+                  },
+                ),
               ),
             ),
           ),
@@ -71,7 +77,7 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
   Widget _buildContent(RestaurantModel restaurant, BuildContext context) {
     return DefaultTabController(
       length: 3,
-      child: ListView(
+      child: Column(
         //   crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ClipRRect(
@@ -97,15 +103,31 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
             children: [
               Expanded(
                 child: Column(
+                  spacing: 5,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       restaurant.name!,
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
-                    Text(
-                      restaurant.city!,
-                      style: Theme.of(context).textTheme.bodyMedium,
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      spacing: 5,
+                      children: [
+                        const Icon(
+                          Icons.location_on_outlined,
+                          color: Colors.red,
+                          size: 20.0,
+                        ),
+                        Expanded(
+                          child: Text(
+                            restaurant.address! + ', ' + restaurant.city!,
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -147,11 +169,7 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
             indicatorSize: TabBarIndicatorSize.tab,
           ),
           SizedBox(height: 10),
-          ConstrainedBox(
-            constraints: BoxConstraints(
-              maxHeight: MediaQuery.of(context).size.height,
-              minHeight: 100,
-            ),
+          Expanded(
             child: TabBarView(
               children: [
                 DetailOverViewSection(restaurant: restaurant),

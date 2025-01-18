@@ -28,15 +28,15 @@ class MainApp extends StatelessWidget {
         builder: (context, provider, child) {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
-            title: 'Flutter Demo',
-            theme: provider.themeMode == ThemeMode.light
-                ? theme.light()
-                : theme.dark(),
+            title: 'Dicoding Restaurant',
+            theme: theme.light(),
+            themeMode: provider.themeMode,
             onGenerateInitialRoutes: (initialRoute) {
               return [
                 AppRoutes.generateRoute(RouteSettings(name: initialRoute)),
               ];
             },
+            darkTheme: theme.dark(),
             onGenerateRoute: AppRoutes.generateRoute,
             initialRoute: '/',
           );

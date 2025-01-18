@@ -7,7 +7,9 @@ class RestaurantRepository {
   final service = RestaurantService();
   Future<void> addReview({required String id, name, review}) async {
     try {
-      await service.addReview(id: id, name: name, review: review);
+      final response =
+          await service.addReview(id: id, name: name, review: review);
+      print("REVIEW: ${response.statusCode} ${response.body}");
     } catch (e) {
       print("ERROR ADD REVIEW: $e");
       throw Exception('Request failed: $e');

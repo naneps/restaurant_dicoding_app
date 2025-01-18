@@ -32,75 +32,39 @@ class RestaurantReviewSection extends StatelessWidget {
             Row(
               children: [
                 Expanded(
-                  child: Form(
-                    key: provider.formKey,
-                    child: TextFormField(
-                      controller: provider.reviewController,
-                      maxLines: 5,
-                      minLines: 1,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter some text';
-                        }
-                        return null;
-                      },
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        hintText: 'Write your review',
-                        constraints: const BoxConstraints(minHeight: 50),
-                        contentPadding: const EdgeInsets.all(10),
-                        suffixIconColor: Theme.of(context).colorScheme.primary,
-                        suffixIcon: IconButton(
-                          style: IconButton.styleFrom(
-                            minimumSize: const Size(0, 0),
-                            fixedSize: const Size(20, 20),
-                            backgroundColor: Colors.transparent,
-                          ),
-                          padding: const EdgeInsets.all(0),
-                          icon: const Icon(Icons.send),
-                          onPressed: () {
-                            if (provider.formKey.currentState!.validate()) {
-                              provider.addReview(id: restaurant.id!);
-                            }
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
+                  child: FieldReview(restaurant: restaurant),
                 ),
               ],
             ),
-            const Divider(),
           ],
-          ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: restaurant.customerReviews!.length,
-            itemBuilder: (context, index) => ListTile(
-              title: Text(restaurant.customerReviews![index].name!),
-              subtitle: Column(
-                spacing: 5,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ExpandableText(
-                    restaurant.customerReviews![index].review!,
-                    expandText: "Show More",
-                    collapseText: "Show Less",
-                    maxLines: 4,
+          Expanded(
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: restaurant.customerReviews!.length,
+              itemBuilder: (context, index) => ListTile(
+                title: Text(restaurant.customerReviews![index].name!),
+                subtitle: Column(
+                  spacing: 5,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ExpandableText(
+                      restaurant.customerReviews![index].review!,
+                      expandText: "Show More",
+                      collapseText: "Show Less",
+                      maxLines: 4,
+                    ),
+                    Text(
+                      restaurant.customerReviews![index].date!,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: Colors.grey.shade500,
+                          ),
+                    ),
+                  ],
+                ),
+                leading: CircleAvatar(
+                  backgroundImage: NetworkImage(
+                    "https://avatar.iran.liara.run/public/$index",
                   ),
-                  Text(
-                    restaurant.customerReviews![index].date!,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Colors.grey.shade500,
-                        ),
-                  ),
-                ],
-              ),
-              leading: CircleAvatar(
-                backgroundImage: NetworkImage(
-                  "https://avatar.iran.liara.run/public/$index",
                 ),
               ),
             ),

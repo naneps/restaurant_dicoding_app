@@ -27,8 +27,8 @@ class RestaurantMenuSection extends StatelessWidget {
         children: [
           ListView.builder(
             shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
             itemCount: items.length,
+            physics: const NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) {
               final item = items[index];
               return ListTile(
@@ -44,23 +44,25 @@ class RestaurantMenuSection extends StatelessWidget {
       );
     }
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: Column(
-        spacing: 10,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildMenuSection(
-            title: "Foods (${restaurant.menus!.foods!.length})",
-            icon: Icons.fastfood,
-            items: restaurant.menus!.foods!,
-          ),
-          _buildMenuSection(
-            title: "Drinks (${restaurant.menus!.drinks!.length})",
-            icon: Icons.local_drink,
-            items: restaurant.menus!.drinks!,
-          ),
-        ],
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        child: ListView(
+          //   spacing: 10,
+          //   crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildMenuSection(
+              title: "Foods (${restaurant.menus!.foods!.length})",
+              icon: Icons.fastfood,
+              items: restaurant.menus!.foods!,
+            ),
+            _buildMenuSection(
+              title: "Drinks (${restaurant.menus!.drinks!.length})",
+              icon: Icons.local_drink,
+              items: restaurant.menus!.drinks!,
+            ),
+          ],
+        ),
       ),
     );
   }
