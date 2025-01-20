@@ -122,29 +122,32 @@ class _RestaurantImage extends StatelessWidget {
         clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: Colors.grey.shade300),
+          border: Border.all(color: Theme.of(context).colorScheme.outline),
           color: Theme.of(context).colorScheme.surfaceContainer,
         ),
-        child: Image.network(
-          "$restaurantLargeImageUrl'x'${restaurant.pictureId}",
-          fit: BoxFit.cover,
-          height: constraints.maxHeight * 0.4,
-          width: double.infinity,
-          cacheHeight: 250,
-          errorBuilder: (context, error, stackTrace) {
-            return Image.asset(
-              assetPlaceholderImg,
-              fit: BoxFit.cover,
-              height: constraints.maxHeight * 0.4,
-              width: double.infinity,
-            );
-          },
-          loadingBuilder: (context, child, loadingProgress) {
-            if (loadingProgress == null) return child;
-            return LoadingImageWidget(
-              size: const Size(double.infinity, 250),
-            );
-          },
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: Image.network(
+            "$restaurantLargeImageUrl${restaurant.pictureId}",
+            fit: BoxFit.cover,
+            height: constraints.maxHeight * 0.4,
+            width: double.infinity,
+            cacheHeight: 250,
+            errorBuilder: (context, error, stackTrace) {
+              return Image.asset(
+                assetPlaceholderImg,
+                fit: BoxFit.cover,
+                height: constraints.maxHeight * 0.4,
+                width: double.infinity,
+              );
+            },
+            loadingBuilder: (context, child, loadingProgress) {
+              if (loadingProgress == null) return child;
+              return LoadingImageWidget(
+                size: const Size(double.infinity, 250),
+              );
+            },
+          ),
         ),
       ),
     );

@@ -58,6 +58,11 @@ class MaterialTheme {
         bodyColor: colorScheme.onSurface,
         displayColor: colorScheme.onSurface,
       ),
+      appBarTheme: AppBarTheme(
+        backgroundColor: colorScheme.primaryContainer,
+        foregroundColor: colorScheme.onSurface,
+        elevation: 0,
+      ),
       scaffoldBackgroundColor: colorScheme.surface,
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
