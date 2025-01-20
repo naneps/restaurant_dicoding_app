@@ -12,7 +12,7 @@ class LoadingWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<ThemeProvider>(builder: (context, provider, child) {
       return Center(
-        child: LottieBuilder.asset(
+        child: Lottie.asset(
           provider.themeMode == ThemeMode.light
               ? loadingAnimation
               : loadingAnimationSecond,

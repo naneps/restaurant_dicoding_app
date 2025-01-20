@@ -18,28 +18,34 @@ class RestaurantMenuSection extends StatelessWidget {
         title: Text(title),
         visualDensity: VisualDensity.compact,
         leading: Icon(icon),
+        backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
         collapsedShape: const RoundedRectangleBorder(
           side: BorderSide(style: BorderStyle.none),
         ),
+        collapsedBackgroundColor:
+            Theme.of(context).colorScheme.surfaceContainer,
         shape: const RoundedRectangleBorder(
           side: BorderSide(style: BorderStyle.none),
         ),
+        childrenPadding: const EdgeInsets.symmetric(vertical: 10),
         children: [
-          ListView.builder(
-            shrinkWrap: true,
-            itemCount: items.length,
-            physics: const NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) {
-              final item = items[index];
-              return ListTile(
-                visualDensity: const VisualDensity(
-                  horizontal: VisualDensity.minimumDensity,
-                  vertical: VisualDensity.minimumDensity,
-                ),
-                title: Text(item.name!),
-              );
-            },
-          ),
+          LayoutBuilder(builder: (context, constraints) {
+            return GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: constraints.maxWidth ~/ 150,
+                childAspectRatio: 0.9,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+              ),
+              itemCount: items.length,
+              itemBuilder: (context, index) {
+                final item = items[index];
+                return MenuWidget(item: item);
+              },
+            );
+          })
         ],
       );
     }

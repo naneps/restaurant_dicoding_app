@@ -9,41 +9,52 @@ class DetailOverViewSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: 10.0,
+        vertical: 10.0,
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Tooltip(
-            message: "Categories",
-            child: Wrap(
-              spacing: 5,
-              children: [
-                ...restaurant.categories!.map(
-                  (category) => Chip(
-                    label: Text(category.name!),
-                    visualDensity: VisualDensity.compact,
-                  ),
-                )
-              ],
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surfaceContainer,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: SingleChildScrollView(
+        child: Column(
+          spacing: 10,
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Categories",
+              style: Theme.of(context).textTheme.titleSmall,
             ),
-          ),
-          const SizedBox(height: 10),
-          Text(
-            "Description",
-            style: Theme.of(context).textTheme.titleSmall,
-          ),
-          ExpandableText(
-            restaurant.description!,
-            expandText: "Read more",
-            collapseText: "Show less",
-            maxLines: 5,
-            animation: true,
-          ),
-        ],
+            Tooltip(
+              message: "Categories",
+              child: Wrap(
+                spacing: 5,
+                children: [
+                  ...restaurant.categories!.map(
+                    (category) => Chip(
+                      label: Text(category.name!),
+                      visualDensity: VisualDensity.compact,
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Text(
+              "Description",
+              style: Theme.of(context).textTheme.titleSmall,
+            ),
+            ExpandableText(
+              restaurant.description!,
+              expandText: "Read more",
+              collapseText: "Show less",
+              maxLines: 5,
+              animation: true,
+            ),
+          ],
+        ),
       ),
     );
   }

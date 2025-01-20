@@ -76,20 +76,25 @@ class _RestaurantListScreenState extends State<RestaurantListScreen> {
                         if (state is RestaurantLoadingState) {
                           return SliverFillRemaining(child: LoadingWidget());
                         } else if (state is RestaurantLoadedState) {
-                          return SliverGrid.builder(
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              childAspectRatio: 1 / 1.2,
-                              crossAxisSpacing: 10,
-                              mainAxisSpacing: 10,
-                            ),
-                            itemCount: state.restaurants.length,
-                            itemBuilder: (context, index) {
-                              final restaurant = state.restaurants[index];
-                              return RestaurantGridItem(restaurant: restaurant);
-                            },
-                          );
+                          return SliverLayoutBuilder(
+                              builder: (context, constraints) {
+                            return SliverGrid.builder(
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount:
+                                    constraints.crossAxisExtent ~/ 200,
+                                childAspectRatio: 1,
+                                crossAxisSpacing: 10,
+                                mainAxisSpacing: 10,
+                              ),
+                              itemCount: state.restaurants.length,
+                              itemBuilder: (context, index) {
+                                final restaurant = state.restaurants[index];
+                                return RestaurantGridItem(
+                                    restaurant: restaurant);
+                              },
+                            );
+                          });
                         } else if (state is RestaurantEmptyState) {
                           return const SliverFillRemaining(
                             child: EmptyDataWidget(),

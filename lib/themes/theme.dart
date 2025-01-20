@@ -127,9 +127,9 @@ class MaterialTheme {
   static ColorScheme darkScheme() {
     return const ColorScheme(
       brightness: Brightness.dark,
-      primary: Color(0xffc1c1ff),
+      primary: Color.fromARGB(255, 113, 129, 223),
       surfaceTint: Color(0xffc1c1ff),
-      onPrimary: Color(0xff292a60),
+      onPrimary: Color.fromARGB(255, 219, 230, 244),
       primaryContainer: Color.fromARGB(255, 83, 83, 115),
       onPrimaryContainer: Color.fromARGB(255, 236, 239, 255),
       secondary: Color(0xffc6c4dd),
@@ -176,7 +176,7 @@ class MaterialTheme {
   }
 
   static ColorScheme lightScheme() {
-    return const ColorScheme(
+    return ColorScheme(
       brightness: Brightness.light,
       primary: Color.fromARGB(255, 45, 46, 70),
       surfaceTint: Color(0xff585992),
@@ -198,7 +198,7 @@ class MaterialTheme {
       surface: Color.fromARGB(255, 248, 249, 255),
       onSurface: Color(0xff1b1b21),
       onSurfaceVariant: Color(0xff47464f),
-      outline: Color(0xff777680),
+      outline: Colors.grey.shade300,
       outlineVariant: Color(0xffc8c5d0),
       shadow: Color(0xff000000),
       scrim: Color(0xff000000),

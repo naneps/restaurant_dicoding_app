@@ -1,3 +1,4 @@
+final assetPlaceholderImg = "assets/images/placeholder.png";
 final baseUrl = "https://restaurant-api.dicoding.dev/";
 final loadingAnimation = "assets/lottie/loading.json";
 final loadingAnimationSecond = "assets/lottie/loading_second.json";
