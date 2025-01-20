@@ -82,7 +82,8 @@ class _RestaurantListScreenState extends State<RestaurantListScreen> {
                               gridDelegate:
                                   SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount:
-                                    constraints.crossAxisExtent ~/ 200,
+                                    (constraints.crossAxisExtent ~/ 200)
+                                        .clamp(2, 10),
                                 childAspectRatio: 1,
                                 crossAxisSpacing: 10,
                                 mainAxisSpacing: 10,
