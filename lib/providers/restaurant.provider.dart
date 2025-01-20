@@ -25,7 +25,7 @@ class RestaurantLoadingState extends RestaurantState {}
 
 class RestaurantProvider extends ChangeNotifier {
   RestaurantState _restaurantState = RestaurantLoadingState();
-  final RestaurantRepository repo = RestaurantRepository();
+  RestaurantRepository repo = RestaurantRepository();
   bool _isSearching = false;
   TextEditingController searchController = TextEditingController();
   Timer? _debounce;

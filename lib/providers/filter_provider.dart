@@ -12,7 +12,6 @@ class FilterProvider extends ChangeNotifier {
   String get selectedFoodType => _selectedFoodType;
   String get selectedRestaurantType => _selectedRestaurantType;
 
-  // Reset filters
   void resetFilters() {
     _selectedDistance = 'Terdekat';
     _priceRange = const RangeValues(0, 100);
@@ -21,7 +20,6 @@ class FilterProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Setter methods with notifyListeners()
   void setDistance(String value) {
     _selectedDistance = value;
     notifyListeners();
