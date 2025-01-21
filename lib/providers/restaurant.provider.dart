@@ -51,7 +51,6 @@ class RestaurantProvider extends ChangeNotifier {
         review: reviewController.text,
       );
     } catch (e) {
-      print("ERROR ADD REVIEW: $e");
       throw Exception('Request failed: $e');
     } finally {
       Future.delayed(const Duration(milliseconds: 1000), () {
@@ -70,19 +69,18 @@ class RestaurantProvider extends ChangeNotifier {
 
   Future<void> getRestaurant(String id) async {
     try {
-      Future.delayed(const Duration(milliseconds: 500), () async {
-        final result = await repo.getRestaurant(id);
-        if (result == null) {
-          _restaurantState = RestaurantEmptyState();
-        } else {
-          _restaurantState = RestaurantLoadedDetailState(result);
-        }
-      });
+      final result = await repo.getRestaurant(id);
+      if (result == null) {
+        _restaurantState = RestaurantEmptyState();
+      } else {
+        _restaurantState = RestaurantLoadedDetailState(result);
+      }
+    } catch (e) {
+      _restaurantState = RestaurantErrorState('Failed to fetch restaurant: $e');
+    } finally {
       Future.delayed(const Duration(milliseconds: 1500), () {
         notifyListeners();
       });
-    } catch (e) {
-      _restaurantState = RestaurantErrorState('Failed to fetch restaurant: $e');
     }
   }
 
@@ -95,9 +93,8 @@ class RestaurantProvider extends ChangeNotifier {
         _restaurantState = RestaurantLoadedState(result);
       }
     } catch (e) {
-      _restaurantState = RestaurantErrorState(
-        'Failed to fetch restaurants: $e',
-      );
+      _restaurantState =
+          RestaurantErrorState('Failed to fetch restaurants: $e');
     } finally {
       Future.delayed(const Duration(milliseconds: 1500), () {
         notifyListeners();

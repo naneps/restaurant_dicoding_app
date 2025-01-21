@@ -6,7 +6,7 @@ import 'package:restaurant_dicoding_app/providers/theme_provider.dart';
 
 class LoadingWidget extends StatelessWidget {
   final Size? size;
-  LoadingWidget({super.key, this.size = const Size(300, 300)});
+  const LoadingWidget({super.key, this.size = const Size(300, 300)});
 
   @override
   Widget build(BuildContext context) {

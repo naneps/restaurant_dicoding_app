@@ -7,9 +7,9 @@ class FieldReview extends StatefulWidget {
   final RestaurantModel restaurant;
 
   const FieldReview({
-    Key? key,
+    super.key,
     required this.restaurant,
-  }) : super(key: key);
+  });
 
   @override
   _FieldReviewState createState() => _FieldReviewState();
@@ -25,6 +25,7 @@ class _FieldReviewState extends State<FieldReview>
       return Form(
         key: provider.formKey,
         child: TextFormField(
+          maxLines: 4,
           controller: provider.reviewController,
           decoration: InputDecoration(
             border: OutlineInputBorder(

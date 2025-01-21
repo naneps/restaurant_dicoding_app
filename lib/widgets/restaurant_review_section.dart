@@ -2,7 +2,7 @@ part of '../screens/restaurant_detail_screen.dart';
 
 class RestaurantReviewSection extends StatelessWidget {
   final RestaurantModel restaurant;
-  const RestaurantReviewSection({required this.restaurant});
+  const RestaurantReviewSection({super.key, required this.restaurant});
 
   @override
   Widget build(BuildContext context) {
@@ -59,6 +59,7 @@ class RestaurantReviewSection extends StatelessWidget {
                         restaurant.customerReviews![index].review!,
                         expandText: "Show More",
                         collapseText: "Show Less",
+                        style: Theme.of(context).textTheme.bodySmall,
                         maxLines: 4,
                       ),
                       Text(

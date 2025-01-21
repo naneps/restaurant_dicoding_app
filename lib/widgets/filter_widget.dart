@@ -141,12 +141,7 @@ class FilterWidget extends StatelessWidget {
 
             ElevatedButton(
               onPressed: () {
-                print('Filters applied:');
-                print('Distance: ${provider.selectedDistance}');
-                print(
-                    'Price Range: ${provider.priceRange.start} - ${provider.priceRange.end}');
-                print('Food Type: ${provider.selectedFoodType}');
-                print('Restaurant Type: ${provider.selectedRestaurantType}');
+                Navigator.pop(context);
               },
               child: const Text("Apply"),
             ),

@@ -17,6 +17,7 @@ class SearchRestaurantWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
+              spacing: 5,
               children: [
                 Expanded(
                   child: TextField(
@@ -42,6 +43,11 @@ class SearchRestaurantWidget extends StatelessWidget {
                   ),
                 ),
                 IconButton(
+                  style: IconButton.styleFrom(
+                    backgroundColor:
+                        Theme.of(context).colorScheme.surfaceContainer,
+                    minimumSize: const Size(40, 40),
+                  ),
                   onPressed: () {
                     showBottomSheet(
                       context: context,

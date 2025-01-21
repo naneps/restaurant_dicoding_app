@@ -15,61 +15,57 @@ part '../widgets/detail_overview_section.dart';
 part '../widgets/restaurant_menu_section.dart';
 part '../widgets/restaurant_review_section.dart';
 
-class RestaurantDetailScreen extends StatefulWidget {
+class RestaurantDetailScreen extends StatelessWidget {
   final String id;
   const RestaurantDetailScreen({super.key, required this.id});
 
   @override
-  State<RestaurantDetailScreen> createState() => _RestaurantDetailScreenState();
-}
-
-class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
-  @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<RestaurantProvider>(
-      create: (BuildContext context) {
-        return RestaurantProvider()..getRestaurant(widget.id);
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Detail '),
-          forceMaterialTransparency: true,
-          centerTitle: true,
-          actions: [
-            IconButton(
-              icon: Icon(Icons.share_outlined),
-              onPressed: () {},
-              iconSize: 20.0,
-            )
-          ],
-        ),
-        body: RefreshIndicator.adaptive(
-          onRefresh: () async {
-            await context.read<RestaurantProvider>().getRestaurant(widget.id);
-          },
-          child: SafeArea(
-            child: Hero(
-              tag: widget.id,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: Consumer<RestaurantProvider>(
-                  builder: (context, provider, child) {
-                    if (provider.state is RestaurantLoadingState) {
-                      return LoadingWidget();
-                    } else if (provider.state is RestaurantLoadedDetailState) {
-                      final restaurant =
-                          (provider.state as RestaurantLoadedDetailState)
-                              .restaurant;
-                      return _buildContent(restaurant, context);
-                    } else if (provider.state is RestaurantErrorState) {
-                      return ErrorStateWidget();
-                    }
-                    return SizedBox.shrink();
-                  },
+      create: (_) => RestaurantProvider()..getRestaurant(id),
+      child: Hero(
+        tag: id,
+        child: Scaffold(
+          appBar: AppBar(
+            title: const Text('Detail '),
+            forceMaterialTransparency: true,
+            centerTitle: true,
+            actions: [
+              IconButton(
+                icon: Icon(Icons.share_outlined),
+                onPressed: () {},
+                iconSize: 20.0,
+              )
+            ],
+          ),
+          body:
+              Consumer<RestaurantProvider>(builder: (context, provider, child) {
+            return RefreshIndicator.adaptive(
+              onRefresh: () async {
+                await provider.getRestaurant(id);
+              },
+              child: SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Consumer<RestaurantProvider>(
+                    builder: (context, provider, child) {
+                      if (provider.state is RestaurantLoadingState) {
+                        return LoadingWidget();
+                      } else if (provider.state
+                          is RestaurantLoadedDetailState) {
+                        final restaurant =
+                            (provider.state as RestaurantLoadedDetailState)
+                                .restaurant;
+                        return _buildContent(restaurant, context);
+                      } else {
+                        return ErrorStateWidget();
+                      }
+                    },
+                  ),
                 ),
               ),
-            ),
-          ),
+            );
+          }),
         ),
       ),
     );
@@ -144,7 +140,7 @@ class _RestaurantImage extends StatelessWidget {
             loadingBuilder: (context, child, loadingProgress) {
               if (loadingProgress == null) return child;
               return LoadingImageWidget(
-                size: const Size(double.infinity, 250),
+                size: Size(double.infinity, constraints.maxHeight * 0.4),
               );
             },
           ),
@@ -158,7 +154,6 @@ class _RestaurantInformation extends StatelessWidget {
   final BoxConstraints constraints;
   final RestaurantModel restaurant;
   const _RestaurantInformation({
-    super.key,
     required this.restaurant,
     required this.constraints,
   });
@@ -208,7 +203,7 @@ class _RestaurantInformation extends StatelessWidget {
                       ),
                       Expanded(
                         child: Text(
-                          restaurant.address! + ', ' + restaurant.city!,
+                          '${restaurant.address!}, ${restaurant.city!}',
                           style: Theme.of(context).textTheme.bodySmall,
                           overflow: TextOverflow.ellipsis,
                           maxLines: 3,
@@ -379,7 +374,7 @@ class _TabbarSection extends StatelessWidget {
           color: Theme.of(context).colorScheme.surfaceContainer,
         ),
         child: TabBar(
-          tabs: [...tabs.map((e) => Tab(text: e)).toList()],
+          tabs: [...tabs.map((e) => Tab(text: e))],
           padding: const EdgeInsets.all(0),
           indicatorSize: TabBarIndicatorSize.tab,
         ),

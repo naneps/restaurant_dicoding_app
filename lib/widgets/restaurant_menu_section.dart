@@ -9,7 +9,7 @@ class RestaurantMenuSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget _buildMenuSection({
+    Widget buildMenuSection({
       required String title,
       required IconData icon,
       required List<RestaurantMenu> items,
@@ -56,12 +56,12 @@ class RestaurantMenuSection extends StatelessWidget {
         //   spacing: 10,
         //   crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildMenuSection(
+          buildMenuSection(
             title: "Foods (${restaurant.menus!.foods!.length})",
             icon: Icons.fastfood,
             items: restaurant.menus!.foods!,
           ),
-          _buildMenuSection(
+          buildMenuSection(
             title: "Drinks (${restaurant.menus!.drinks!.length})",
             icon: Icons.local_drink,
             items: restaurant.menus!.drinks!,

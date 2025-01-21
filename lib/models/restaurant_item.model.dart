@@ -4,7 +4,7 @@ sealed class Item {
 }
 
 class RestaurantCategory extends Item {
-  const RestaurantCategory({String? name}) : super(name: name);
+  const RestaurantCategory({super.name});
 
   factory RestaurantCategory.fromJson(Map<String, dynamic> json) {
     return RestaurantCategory(
@@ -16,7 +16,7 @@ class RestaurantCategory extends Item {
 class RestaurantMenu extends Item {
   final double? price; // Specific attribute for menu items
 
-  const RestaurantMenu({String? name, this.price}) : super(name: name);
+  const RestaurantMenu({super.name, this.price});
 
   factory RestaurantMenu.fromJson(Map<String, dynamic> json) {
     return RestaurantMenu(

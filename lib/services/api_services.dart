@@ -3,11 +3,12 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  final String baseUrl;
+  String baseUrl;
   final Map<String, String> defaultHeaders;
-
+  bool enableLogging;
   ApiService({
     required this.baseUrl,
+    this.enableLogging = false,
     this.defaultHeaders = const {},
   });
 
@@ -80,7 +81,7 @@ class ApiService {
       final response = await request();
       return _parseResponse(response);
     } catch (e) {
-      throw Exception('Request failed: $e');
+      rethrow;
     }
   }
 
@@ -97,7 +98,10 @@ class ApiService {
       case 201:
         return response;
       default:
-        throw Exception('Request failed: ${response.body}');
+        throw http.ClientException(
+          'Request failed with status: ${response.statusCode}',
+          response.request?.url,
+        );
     }
   }
 }
