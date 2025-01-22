@@ -80,7 +80,7 @@ class RestaurantListScreen extends StatelessWidget {
                                   crossAxisCount:
                                       (constraints.crossAxisExtent ~/ 200)
                                           .clamp(2, 10),
-                                  childAspectRatio: 0.9,
+                                  mainAxisExtent: 250,
                                   crossAxisSpacing: 10,
                                   mainAxisSpacing: 10,
                                 ),

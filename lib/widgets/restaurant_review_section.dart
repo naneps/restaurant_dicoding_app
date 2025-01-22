@@ -37,12 +37,8 @@ class RestaurantReviewSection extends StatelessWidget {
               ],
             ),
             if (provider.showFieldReview) ...[
-              Row(
-                children: [
-                  Expanded(
-                    child: FieldReview(restaurant: restaurant),
-                  ),
-                ],
+              Expanded(
+                child: FieldReview(restaurant: restaurant),
               ),
             ],
             Expanded(
