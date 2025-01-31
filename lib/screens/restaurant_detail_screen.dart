@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant_dicoding_app/constants/app_constants.dart';
 import 'package:restaurant_dicoding_app/models/restaurant.model.dart';
-import 'package:restaurant_dicoding_app/models/restaurant_item.model.dart';
+import 'package:restaurant_dicoding_app/models/restaurant_menu_item.model.dart';
 import 'package:restaurant_dicoding_app/providers/restaurant.provider.dart';
+import 'package:restaurant_dicoding_app/providers/restaurant_detail_provider.dart';
+import 'package:restaurant_dicoding_app/providers/states/restaurant_state.dart';
+import 'package:restaurant_dicoding_app/services/restaurant_favorite_service.dart';
 import 'package:restaurant_dicoding_app/widgets/error_widget.dart';
 import 'package:restaurant_dicoding_app/widgets/field_review.dart';
 import 'package:restaurant_dicoding_app/widgets/loading_image_widget.dart';
@@ -21,8 +24,10 @@ class RestaurantDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<RestaurantProvider>(
-      create: (_) => RestaurantProvider()..getRestaurant(id),
+    return ChangeNotifierProvider<RestaurantDetailProvider>(
+      create: (context) => RestaurantDetailProvider(
+        favoriteService: context.read<RestaurantFavoriteService>(),
+      )..getRestaurant(id),
       child: Hero(
         tag: id,
         child: Scaffold(
@@ -38,8 +43,8 @@ class RestaurantDetailScreen extends StatelessWidget {
               )
             ],
           ),
-          body:
-              Consumer<RestaurantProvider>(builder: (context, provider, child) {
+          body: Consumer<RestaurantDetailProvider>(
+              builder: (context, provider, child) {
             return RefreshIndicator.adaptive(
               onRefresh: () async {
                 await provider.getRestaurant(id);
@@ -47,7 +52,7 @@ class RestaurantDetailScreen extends StatelessWidget {
               child: SafeArea(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  child: Consumer<RestaurantProvider>(
+                  child: Consumer<RestaurantDetailProvider>(
                     builder: (context, provider, child) {
                       if (provider.state is RestaurantLoadingState) {
                         return LoadingWidget();
@@ -196,10 +201,26 @@ class _RestaurantInformation extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     spacing: 5,
                     children: [
-                      const Icon(
-                        Icons.location_on_outlined,
-                        color: Colors.red,
-                        size: 20.0,
+                      Consumer<RestaurantDetailProvider>(
+                        builder: (context, provider, child) {
+                          return IconButton(
+                            style: IconButton.styleFrom(
+                              shape: const CircleBorder(),
+                              backgroundColor: Theme.of(context)
+                                  .colorScheme
+                                  .surfaceContainer,
+                            ),
+                            onPressed: () async {
+                              print(provider.isFavorite);
+                              await provider.toggleFavorite(restaurant.id!);
+                            },
+                            icon: Icon(
+                              provider.isFavorite == true
+                                  ? Icons.favorite
+                                  : Icons.favorite_outline,
+                            ),
+                          );
+                        },
                       ),
                       Expanded(
                         child: Text(

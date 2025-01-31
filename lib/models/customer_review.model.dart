@@ -1,3 +1,8 @@
+import 'package:json_annotation/json_annotation.dart';
+
+part 'customer_review.model.g.dart';
+
+@JsonSerializable()
 class CustomerReview {
   String? name;
   String? review;
@@ -5,19 +10,8 @@ class CustomerReview {
 
   CustomerReview({this.name, this.review, this.date});
 
-  factory CustomerReview.fromJson(Map<String, dynamic> json) {
-    return CustomerReview(
-      name: json['name'],
-      review: json['review'],
-      date: json['date'],
-    );
-  }
+  factory CustomerReview.fromJson(Map<String, dynamic> json) =>
+      _$CustomerReviewFromJson(json);
 
-  Map<String, dynamic> toJson() {
-    return {
-      'name': name,
-      'review': review,
-      'date': date,
-    };
-  }
+  Map<String, dynamic> toJson() => _$CustomerReviewToJson(this);
 }

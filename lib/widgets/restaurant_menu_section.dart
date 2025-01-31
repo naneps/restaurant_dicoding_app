@@ -12,7 +12,7 @@ class RestaurantMenuSection extends StatelessWidget {
     Widget buildMenuSection({
       required String title,
       required IconData icon,
-      required List<RestaurantMenu> items,
+      required List<RestaurantMenuItem> items,
     }) {
       return ExpansionTile(
         title: Text(title),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant_dicoding_app/providers/restaurant.provider.dart';
+import 'package:restaurant_dicoding_app/providers/states/restaurant_state.dart';
 import 'package:restaurant_dicoding_app/widgets/filter_widget.dart';
 
 class SearchRestaurantWidget extends StatelessWidget {

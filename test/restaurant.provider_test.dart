@@ -3,7 +3,9 @@ import 'package:http/http.dart';
 import 'package:mockito/mockito.dart';
 import 'package:restaurant_dicoding_app/models/restaurant.model.dart';
 import 'package:restaurant_dicoding_app/providers/restaurant.provider.dart';
+import 'package:restaurant_dicoding_app/providers/states/restaurant_state.dart';
 import 'package:restaurant_dicoding_app/repositories/restaurant_repository.dart';
+import 'package:restaurant_dicoding_app/services/restaurant_favorite_service.dart';
 import 'package:restaurant_dicoding_app/services/restaurant_service.dart';
 
 void main() {
@@ -16,7 +18,9 @@ void main() {
     mockService = MockRestaurantService();
     mockService.baseUrl = 'https://restaurant-api.dicoding.dev';
     mockRepository.service = mockService;
-    provider = RestaurantProvider()..repo = mockRepository;
+    provider = RestaurantProvider(
+      favoriteService: MockRestaurantFavoriteService(),
+    )..repo = mockRepository;
   });
 
   group(
@@ -61,6 +65,9 @@ void main() {
     });
   });
 }
+
+class MockRestaurantFavoriteService extends Mock
+    implements RestaurantFavoriteService {}
 
 class MockRestaurantRepository extends Mock implements RestaurantRepository {}
 

@@ -5,16 +5,11 @@ import 'package:restaurant_dicoding_app/services/api_services.dart';
 class RestaurantService extends ApiService {
   RestaurantService() : super(baseUrl: baseUrl);
   Future<http.Response> addReview({required String id, name, review}) {
-    return post(
-      '/review',
-      body: {'id': id, 'name': name, 'review': review},
-    );
+    return post('/review', body: {'id': id, 'name': name, 'review': review});
   }
 
   Future<http.Response> getRestaurant(String id) => get('/detail/$id');
   Future<http.Response> getRestaurants() => get('/list');
-  Future<http.Response> searchRestaurants(String value) => get(
-        '/search',
-        queryParameters: {'q': value},
-      );
+  Future<http.Response> searchRestaurants(String value) =>
+      get('/search', queryParameters: {'q': value});
 }

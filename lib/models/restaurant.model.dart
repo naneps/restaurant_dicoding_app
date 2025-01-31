@@ -1,40 +1,27 @@
+import 'dart:convert';
+
+import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:restaurant_dicoding_app/models/customer_review.model.dart';
-import 'package:restaurant_dicoding_app/models/restaurant_item.model.dart';
+import 'package:restaurant_dicoding_app/models/restaurant_category.model.dart';
+import 'package:restaurant_dicoding_app/models/restaurant_menu.model.dart';
 
-class RestaurantMenus {
-  List<RestaurantMenu>? foods;
-  List<RestaurantMenu>? drinks;
+part 'restaurant.model.g.dart';
 
-  RestaurantMenus({this.foods, this.drinks});
+@JsonSerializable()
+class RestaurantModel extends Equatable {
+  final String? id;
+  final String? name;
+  final String? description;
+  final String? city;
+  final String? address;
+  final String? pictureId;
+  final double? rating;
+  final List<RestaurantCategory>? categories;
+  final RestaurantMenu? menus;
+  final List<CustomerReview>? customerReviews;
 
-  factory RestaurantMenus.fromJson(Map<String, dynamic> json) {
-    return RestaurantMenus(
-      foods: json['foods'] == null
-          ? null
-          : List<RestaurantMenu>.from(
-              json['foods'].map((x) => RestaurantMenu.fromJson(x))),
-      drinks: json['drinks'] == null
-          ? null
-          : List<RestaurantMenu>.from(
-              json['drinks'].map((x) => RestaurantMenu.fromJson(x))),
-    );
-  }
-}
-
-// Model utama untuk restoran
-class RestaurantModel {
-  String? id;
-  String? name;
-  String? description;
-  String? city;
-  String? address;
-  String? pictureId;
-  double? rating;
-  List<RestaurantCategory>? categories;
-  RestaurantMenus? menus;
-  List<CustomerReview>? customerReviews;
-
-  RestaurantModel({
+  const RestaurantModel({
     this.id,
     this.name,
     this.description,
@@ -46,27 +33,35 @@ class RestaurantModel {
     this.menus,
     this.customerReviews,
   });
+  factory RestaurantModel.fromJson(Map<String, dynamic> json) =>
+      _$RestaurantModelFromJson(json);
 
-  factory RestaurantModel.fromJson(Map<String, dynamic> json) {
-    return RestaurantModel(
-      id: json['id'],
-      name: json['name'],
-      description: json['description'],
-      city: json['city'],
-      address: json['address'],
-      pictureId: json['pictureId'],
-      rating: json['rating']?.toDouble(),
-      categories: json['categories'] == null
-          ? null
-          : List<RestaurantCategory>.from(
-              json['categories'].map((x) => RestaurantCategory.fromJson(x))),
-      menus: json['menus'] == null
-          ? null
-          : RestaurantMenus.fromJson(json['menus']),
-      customerReviews: json['customerReviews'] == null
-          ? null
-          : List<CustomerReview>.from(
-              json['customerReviews'].map((x) => CustomerReview.fromJson(x))),
-    );
-  }
+  @override
+  List<Object?> get props => [
+        id,
+        name,
+        description,
+        city,
+        address,
+        pictureId,
+        rating,
+        categories,
+        menus,
+        customerReviews
+      ];
+
+  Map<String, dynamic> toJson() => _$RestaurantModelToJson(this);
+  Map<String, dynamic> toMap() => {
+        'id': id,
+        'name': name,
+        'description': description,
+        'city': city,
+        'address': address,
+        'pictureId': pictureId,
+        'rating': rating,
+        'categories': jsonEncode(categories?.map((e) => e.toJson()).toList()),
+        'menus': menus?.toJson(),
+        'customerReviews':
+            jsonEncode(customerReviews?.map((e) => e.toJson()).toList()),
+      };
 }

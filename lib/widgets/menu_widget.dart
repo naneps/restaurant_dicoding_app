@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:restaurant_dicoding_app/constants/app_constants.dart';
-import 'package:restaurant_dicoding_app/models/restaurant_item.model.dart';
+import 'package:restaurant_dicoding_app/models/restaurant_menu_item.model.dart';
 import 'package:restaurant_dicoding_app/widgets/loading_image_widget.dart';
 
 class MenuWidget extends StatelessWidget {
-  final RestaurantMenu item;
+  final RestaurantMenuItem item;
 
   const MenuWidget({
     super.key,

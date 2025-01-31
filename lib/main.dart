@@ -2,14 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart'; //
 import 'package:restaurant_dicoding_app/constants/app_routes.dart';
 import 'package:restaurant_dicoding_app/providers/filter_provider.dart';
+import 'package:restaurant_dicoding_app/providers/home_provider.dart';
 import 'package:restaurant_dicoding_app/providers/restaurant.provider.dart';
+import 'package:restaurant_dicoding_app/providers/restaurant_detail_provider.dart';
+import 'package:restaurant_dicoding_app/providers/restaurant_favorite_provider.dart';
 import 'package:restaurant_dicoding_app/providers/theme_provider.dart';
+import 'package:restaurant_dicoding_app/services/restaurant_favorite_service.dart';
 import 'package:restaurant_dicoding_app/themes/theme.dart';
 import 'package:restaurant_dicoding_app/themes/util.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await favoriteService.init();
   runApp(const MainApp());
 }
+
+final favoriteService = RestaurantFavoriteService();
 
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
@@ -20,7 +29,21 @@ class MainApp extends StatelessWidget {
     MaterialTheme theme = MaterialTheme(textTheme);
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => RestaurantProvider()),
+        Provider.value(
+          value: favoriteService,
+        ),
+        ChangeNotifierProvider(
+          create: (context) =>
+              RestaurantProvider(favoriteService: favoriteService),
+        ),
+        ChangeNotifierProvider(
+          create: (context) =>
+              RestaurantDetailProvider(favoriteService: favoriteService),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => RestaurantFavoriteProvider(favoriteService),
+        ),
+        ChangeNotifierProvider(create: (_) => HomeProvider()),
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => FilterProvider()),
       ],

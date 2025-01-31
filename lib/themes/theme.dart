@@ -54,6 +54,20 @@ class MaterialTheme {
       useMaterial3: true,
       brightness: colorScheme.brightness,
       colorScheme: colorScheme,
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          backgroundColor: colorScheme.surface,
+          selectedItemColor: colorScheme.primary,
+          unselectedItemColor: colorScheme.onSurface,
+          selectedIconTheme: IconThemeData(
+            color: colorScheme.primary,
+          ),
+          unselectedIconTheme: IconThemeData(
+            color: colorScheme.onSurface,
+          ),
+          selectedLabelStyle: textTheme.labelMedium,
+          unselectedLabelStyle: textTheme.labelSmall,
+          landscapeLayout: BottomNavigationBarLandscapeLayout.centered,
+          elevation: 0),
       textTheme: textTheme.apply(
         bodyColor: colorScheme.onSurface,
         displayColor: colorScheme.onSurface,
