@@ -6,14 +6,16 @@ import 'package:restaurant_dicoding_app/providers/home_provider.dart';
 import 'package:restaurant_dicoding_app/providers/restaurant.provider.dart';
 import 'package:restaurant_dicoding_app/providers/restaurant_detail_provider.dart';
 import 'package:restaurant_dicoding_app/providers/restaurant_favorite_provider.dart';
+import 'package:restaurant_dicoding_app/providers/setting_provider.dart';
 import 'package:restaurant_dicoding_app/providers/theme_provider.dart';
+import 'package:restaurant_dicoding_app/services/local_storage_service.dart';
 import 'package:restaurant_dicoding_app/services/restaurant_favorite_service.dart';
 import 'package:restaurant_dicoding_app/themes/theme.dart';
 import 'package:restaurant_dicoding_app/themes/util.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  await LocalStorageService().init();
   await favoriteService.init();
   runApp(const MainApp());
 }
@@ -43,6 +45,7 @@ class MainApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => RestaurantFavoriteProvider(favoriteService),
         ),
+        ChangeNotifierProvider(create: (_) => SettingProvider()),
         ChangeNotifierProvider(create: (_) => HomeProvider()),
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => FilterProvider()),

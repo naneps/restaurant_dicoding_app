@@ -77,9 +77,6 @@ class DatabaseService {
 
           onCreate(database, version);
         },
-        onOpen: (database) async {
-          onCreate(database, databaseVersion);
-        },
       );
     } catch (e) {
       print('Error initializing database: $e');

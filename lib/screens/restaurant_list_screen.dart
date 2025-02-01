@@ -18,6 +18,7 @@ class RestaurantListScreen extends StatelessWidget {
     return Scaffold(
       extendBody: true,
       body: SafeArea(
+        bottom: false,
         child: GestureDetector(
           onPanDown: (_) {
             FocusScope.of(context).unfocus();
@@ -37,13 +38,7 @@ class RestaurantListScreen extends StatelessWidget {
                     title: const Text('Find a Restaurant'),
                     forceMaterialTransparency: true,
                     expandedHeight: 0,
-                    actions: [
-                      IconButton(
-                        icon: const Icon(Icons.settings_outlined),
-                        onPressed: () {},
-                      ),
-                      ButtonToggleTheme()
-                    ],
+                    actions: [ButtonToggleTheme()],
                   ),
                   Builder(builder: (_) {
                     return SliverAppBar(

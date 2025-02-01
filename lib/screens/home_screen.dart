@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant_dicoding_app/providers/home_provider.dart';
-import 'package:restaurant_dicoding_app/screens/restaurant_favorite_screen.dart';
-import 'package:restaurant_dicoding_app/screens/restaurant_list_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -27,33 +25,47 @@ class HomeScreen extends StatelessWidget {
                   child: child,
                 );
               },
-              child: provider.activeIndex == 0
-                  ? const RestaurantListScreen(
-                      key: ValueKey('RestaurantListScreen'),
-                    )
-                  : const RestaurantFavoriteScreen(
-                      key: ValueKey('RestaurantFavoriteScreen'),
-                    ),
+              child: provider.screens[provider.activeIndex],
             );
           },
           animation: provider,
         ),
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: provider.activeIndex,
-          backgroundColor: Colors.transparent,
-          onTap: (index) => provider.setActiveIndex(index),
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              activeIcon: Icon(Icons.dashboard),
-              icon: Icon(Icons.dashboard_outlined),
-              label: 'Explorer',
+        bottomNavigationBar: SafeArea(
+          top: false,
+          child: Container(
+            padding: const EdgeInsets.all(10),
+            margin: const EdgeInsets.symmetric(
+              horizontal: 20,
             ),
-            BottomNavigationBarItem(
-              activeIcon: Icon(Icons.favorite),
-              icon: Icon(Icons.favorite_border),
-              label: 'Favorite',
-            )
-          ],
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surfaceContainer,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: Colors.grey.shade300),
+            ),
+            child: BottomNavigationBar(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              currentIndex: provider.activeIndex,
+              onTap: (index) => provider.setActiveIndex(index),
+              items: const [
+                BottomNavigationBarItem(
+                  activeIcon: Icon(Icons.home),
+                  icon: Icon(Icons.home_outlined),
+                  label: 'Home',
+                ),
+                BottomNavigationBarItem(
+                  activeIcon: Icon(Icons.favorite),
+                  icon: Icon(Icons.favorite_border),
+                  label: 'Favorite',
+                ),
+                BottomNavigationBarItem(
+                  activeIcon: Icon(Icons.settings),
+                  icon: Icon(Icons.settings_outlined),
+                  label: 'Settings',
+                ),
+              ],
+            ),
+          ),
         ),
       );
     });

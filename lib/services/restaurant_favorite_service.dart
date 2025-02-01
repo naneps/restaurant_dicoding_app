@@ -48,7 +48,7 @@ class RestaurantFavoriteService extends DatabaseService {
 
   Future<void> insertFavorite(RestaurantModel restaurant) async {
     try {
-      await insert(_tableName, restaurant.toJson());
+      await insert(_tableName, restaurant.toMap());
       print('Favorite inserted successfully with data: ${restaurant.toJson()}');
     } catch (e) {
       print('Error inserting favorite: $e');

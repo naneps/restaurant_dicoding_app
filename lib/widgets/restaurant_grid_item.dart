@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:restaurant_dicoding_app/constants/app_constants.dart';
 import 'package:restaurant_dicoding_app/constants/app_routes.dart';
 import 'package:restaurant_dicoding_app/models/restaurant.model.dart';
+import 'package:restaurant_dicoding_app/providers/restaurant.provider.dart';
 import 'package:restaurant_dicoding_app/widgets/loading_image_widget.dart';
 
 class RestaurantGridItem extends StatelessWidget {
@@ -28,51 +30,31 @@ class RestaurantGridItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
-                child: Stack(
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        if (restaurant.id != null) {
-                          Navigator.pushNamed(
-                            context,
-                            AppRoutes.restaurantDetail,
-                            arguments: restaurant.id,
-                          );
-                        } else {}
-                      },
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.2,
-                          width: MediaQuery.of(context).size.width,
-                          child: Image.network(
-                            "$restaurantSmallImageUrl${restaurant.pictureId}",
-                            fit: BoxFit.cover,
-                            loadingBuilder: (context, child, loadingProgress) {
-                              if (loadingProgress == null) return child;
-                              return LoadingImageWidget();
-                            },
-                          ),
-                        ),
+                child: InkWell(
+                  onTap: () {
+                    if (restaurant.id != null) {
+                      Navigator.pushNamed(
+                        context,
+                        AppRoutes.restaurantDetail,
+                        arguments: restaurant.id,
+                      );
+                    } else {}
+                  },
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.2,
+                      width: MediaQuery.of(context).size.width,
+                      child: Image.network(
+                        "$restaurantSmallImageUrl${restaurant.pictureId}",
+                        fit: BoxFit.cover,
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return LoadingImageWidget();
+                        },
                       ),
                     ),
-                    Positioned(
-                      top: 5,
-                      right: 5,
-                      child: Material(
-                        color: Theme.of(context).colorScheme.surfaceContainer,
-                        borderRadius: BorderRadius.circular(8),
-                        child: InkWell(
-                          onTap: () {},
-                          splashColor: Theme.of(context).colorScheme.onSurface,
-                          child: Icon(
-                            Icons.favorite_border,
-                            color: Theme.of(context).colorScheme.onSurface,
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
+                  ),
                 ),
               ),
               Column(
@@ -143,9 +125,15 @@ class RestaurantGridItem extends StatelessWidget {
                         visualDensity: VisualDensity.compact,
                       ),
                       icon: Icon(
-                        Icons.drive_eta_outlined,
+                        restaurant.isFavorite
+                            ? Icons.favorite
+                            : Icons.favorite_border,
                       ),
-                      onPressed: () {},
+                      onPressed: () async {
+                        await context
+                            .read<RestaurantProvider>()
+                            .toggleFavorite(restaurant);
+                      },
                     ),
                   )
                 ],

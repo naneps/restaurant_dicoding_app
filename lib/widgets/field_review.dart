@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant_dicoding_app/models/restaurant.model.dart';
-import 'package:restaurant_dicoding_app/providers/restaurant.provider.dart';
+import 'package:restaurant_dicoding_app/providers/restaurant_detail_provider.dart';
 
 class FieldReview extends StatefulWidget {
   final RestaurantModel restaurant;
@@ -21,7 +21,8 @@ class _FieldReviewState extends State<FieldReview>
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<RestaurantProvider>(builder: (context, provider, child) {
+    return Consumer<RestaurantDetailProvider>(
+        builder: (context, provider, child) {
       return Form(
         key: provider.formKey,
         child: TextFormField(

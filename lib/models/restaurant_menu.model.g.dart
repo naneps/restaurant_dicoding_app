@@ -18,6 +18,6 @@ RestaurantMenu _$RestaurantMenuFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$RestaurantMenuToJson(RestaurantMenu instance) =>
     <String, dynamic>{
-      'foods': instance.foods,
-      'drinks': instance.drinks,
+      'foods': RestaurantMenu._foodsToJson(instance.foods),
+      'drinks': RestaurantMenu._drinksToJson(instance.drinks),
     };

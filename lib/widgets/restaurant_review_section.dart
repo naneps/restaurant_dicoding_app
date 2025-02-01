@@ -13,7 +13,8 @@ class RestaurantReviewSection extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         border: Border.all(color: Colors.grey.shade300),
       ),
-      child: Consumer<RestaurantProvider>(builder: (context, provider, child) {
+      child: Consumer<RestaurantDetailProvider>(
+          builder: (context, provider, child) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

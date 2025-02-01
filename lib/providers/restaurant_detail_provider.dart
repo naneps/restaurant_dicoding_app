@@ -47,6 +47,7 @@ class RestaurantDetailProvider extends ChangeNotifier {
         _restaurantState = RestaurantEmptyState();
       } else {
         _restaurantState = RestaurantLoadedDetailState(result);
+        _isFavorite = await favoriteService.isFavorite(id);
       }
     } catch (e) {
       _restaurantState = RestaurantErrorState('Failed to fetch restaurant: $e');

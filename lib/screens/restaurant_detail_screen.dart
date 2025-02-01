@@ -201,26 +201,10 @@ class _RestaurantInformation extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     spacing: 5,
                     children: [
-                      Consumer<RestaurantDetailProvider>(
-                        builder: (context, provider, child) {
-                          return IconButton(
-                            style: IconButton.styleFrom(
-                              shape: const CircleBorder(),
-                              backgroundColor: Theme.of(context)
-                                  .colorScheme
-                                  .surfaceContainer,
-                            ),
-                            onPressed: () async {
-                              print(provider.isFavorite);
-                              await provider.toggleFavorite(restaurant.id!);
-                            },
-                            icon: Icon(
-                              provider.isFavorite == true
-                                  ? Icons.favorite
-                                  : Icons.favorite_outline,
-                            ),
-                          );
-                        },
+                      const Icon(
+                        Icons.location_on_outlined,
+                        color: Colors.red,
+                        size: 20.0,
                       ),
                       Expanded(
                         child: Text(
@@ -251,17 +235,31 @@ class _RestaurantInformation extends StatelessWidget {
                 ),
               ],
             ),
-            IconButton(
-              style: IconButton.styleFrom(
-                shape: const CircleBorder(),
-                backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
-              ),
-              icon: const Icon(
-                Icons.favorite_outline,
-                color: Colors.red,
-              ),
-              iconSize: 20.0,
-              onPressed: () {},
+            Selector<RestaurantDetailProvider, bool>(
+              selector: (context, provider) {
+                // Mengembalikan status favorit dari provider
+                return provider.isFavorite;
+              },
+              builder: (context, isFavorite, child) {
+                return IconButton(
+                  style: IconButton.styleFrom(
+                    shape: const CircleBorder(),
+                    backgroundColor:
+                        Theme.of(context).colorScheme.surfaceContainer,
+                  ),
+                  icon: Icon(
+                    // Tampilkan ikon favorit berdasarkan status isFavorite
+                    isFavorite ? Icons.favorite : Icons.favorite_outline,
+                    color: Colors.red,
+                  ),
+                  iconSize: 20.0,
+                  onPressed: () {
+                    // Panggil metode toggleFavorite saat tombol ditekan
+                    final provider = context.read<RestaurantDetailProvider>();
+                    provider.toggleFavorite(restaurant.id!);
+                  },
+                );
+              },
             )
           ],
         ),
