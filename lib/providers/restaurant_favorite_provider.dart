@@ -27,4 +27,17 @@ class RestaurantFavoriteProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  void removeFavorite(String id) async {
+    try {
+      await _favoriteService.deleteFavorite(id);
+      getFavorites();
+    } catch (e) {
+      _restaurantState =
+          RestaurantErrorState('Failed to fetch restaurants: $e');
+      notifyListeners();
+    } finally {
+      notifyListeners();
+    }
+  }
 }

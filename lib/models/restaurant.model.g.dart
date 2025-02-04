@@ -15,11 +15,15 @@ RestaurantModel _$RestaurantModelFromJson(Map<String, dynamic> json) =>
       address: json['address'] as String?,
       pictureId: json['pictureId'] as String?,
       rating: (json['rating'] as num?)?.toDouble(),
-      //   categories: RestaurantModel._categoriesFromJson(json['categories']),
-      //   menus: RestaurantModel._menusFromJson(json['menus']),
-      //   customerReviews:
-      //       RestaurantModel._reviewsFromJson(json['customerReviews']),
-      //   isFavorite: json['isFavorite'] as bool? ?? false,
+      categories: (json['categories'] as List<dynamic>?)
+          ?.map((e) => RestaurantCategory.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      menus: json['menus'] == null
+          ? null
+          : RestaurantMenu.fromJson(json['menus'] as Map<String, dynamic>),
+      customerReviews: (json['customerReviews'] as List<dynamic>?)
+          ?.map((e) => CustomerReview.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$RestaurantModelToJson(RestaurantModel instance) =>

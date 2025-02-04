@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:restaurant_dicoding_app/constants/app_constants.dart';
 import 'package:restaurant_dicoding_app/models/restaurant.model.dart';
 import 'package:restaurant_dicoding_app/models/restaurant_menu_item.model.dart';
-import 'package:restaurant_dicoding_app/providers/restaurant.provider.dart';
 import 'package:restaurant_dicoding_app/providers/restaurant_detail_provider.dart';
 import 'package:restaurant_dicoding_app/providers/states/restaurant_state.dart';
 import 'package:restaurant_dicoding_app/services/restaurant_favorite_service.dart';
@@ -257,6 +256,7 @@ class _RestaurantInformation extends StatelessWidget {
                     // Panggil metode toggleFavorite saat tombol ditekan
                     final provider = context.read<RestaurantDetailProvider>();
                     provider.toggleFavorite(restaurant.id!);
+                    context.read<RestaurantFavoriteService>().getFavorites();
                   },
                 );
               },

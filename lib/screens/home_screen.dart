@@ -46,7 +46,9 @@ class HomeScreen extends StatelessWidget {
               backgroundColor: Colors.transparent,
               elevation: 0,
               currentIndex: provider.activeIndex,
-              onTap: (index) => provider.setActiveIndex(index),
+              onTap: (index) {
+                provider.setActiveIndex(index);
+              },
               items: const [
                 BottomNavigationBarItem(
                   activeIcon: Icon(Icons.home),

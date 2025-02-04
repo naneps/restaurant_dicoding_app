@@ -9,7 +9,6 @@ import 'package:restaurant_dicoding_app/models/restaurant_menu.model.dart';
 part 'restaurant.model.g.dart';
 
 @JsonSerializable()
-@JsonSerializable()
 class RestaurantModel extends Equatable {
   final String? id;
   final String? name;
@@ -20,13 +19,13 @@ class RestaurantModel extends Equatable {
   final double? rating;
   bool isFavorite;
 
-  @JsonKey(toJson: _categoriesToJson, fromJson: _categoriesFromJson)
+  @JsonKey(toJson: _categoriesToJson)
   final List<RestaurantCategory>? categories;
 
-  @JsonKey(toJson: _menusToJson, fromJson: _menusFromJson)
+  @JsonKey(toJson: _menusToJson)
   final RestaurantMenu? menus;
 
-  @JsonKey(toJson: _reviewsToJson, fromJson: _reviewsFromJson)
+  @JsonKey(toJson: _reviewsToJson)
   final List<CustomerReview>? customerReviews;
 
   RestaurantModel({
@@ -45,6 +44,31 @@ class RestaurantModel extends Equatable {
 
   factory RestaurantModel.fromJson(Map<String, dynamic> json) =>
       _$RestaurantModelFromJson(json);
+  factory RestaurantModel.fromSqlite(Map<String, dynamic> json) {
+    return RestaurantModel(
+      id: json['id'],
+      name: json['name'],
+      description: json['description'],
+      city: json['city'],
+      address: json['address'],
+      pictureId: json['pictureId'],
+      rating: json['rating'],
+      categories: jsonDecode(json['categories']) != null
+          ? List<RestaurantCategory>.from(jsonDecode(json['categories']).map(
+              (x) => RestaurantCategory.fromJson(x),
+            ))
+          : null,
+      menus: jsonDecode(json['menus']) != null
+          ? RestaurantMenu.fromJson(jsonDecode(json['menus']))
+          : null,
+      customerReviews: jsonDecode(json['customerReviews']) != null
+          ? List<CustomerReview>.from(jsonDecode(json['customerReviews']).map(
+              (x) => CustomerReview.fromJson(x),
+            ))
+          : null,
+      isFavorite: json['isFavorite'] == 1 ? true : false,
+    );
+  }
 
   @override
   List<Object?> get props => [
@@ -57,7 +81,7 @@ class RestaurantModel extends Equatable {
         rating,
         categories,
         menus,
-        customerReviews,
+        customerReviews
       ];
 
   RestaurantModel copyWith({
@@ -106,38 +130,13 @@ class RestaurantModel extends Equatable {
     };
   }
 
-  static List<RestaurantCategory>? _categoriesFromJson(dynamic categories) {
-    if (categories is String) {
-      return jsonDecode(categories)
-          .map<RestaurantCategory>((e) => RestaurantCategory.fromJson(e))
-          .toList();
-    }
-    return categories
-        .map<RestaurantCategory>((e) => RestaurantCategory.fromJson(e))
-        .toList();
-  }
-
   static List<Map<String, dynamic>>? _categoriesToJson(
       List<RestaurantCategory>? categories) {
     return categories?.map((e) => e.toJson()).toList();
   }
 
-  static RestaurantMenu? _menusFromJson(dynamic menus) {
-    if (menus is String) {
-      return RestaurantMenu.fromJson(jsonDecode(menus));
-    }
-    return RestaurantMenu.fromJson(menus);
-  }
-
   static Map<String, dynamic>? _menusToJson(RestaurantMenu? menus) {
     return menus?.toJson();
-  }
-
-  static _reviewsFromJson(dynamic reviews) {
-    if (reviews is String) {
-      return CustomerReview.fromJson(jsonDecode(reviews));
-    }
-    return CustomerReview.fromJson(reviews);
   }
 
   static List<Map<String, dynamic>>? _reviewsToJson(

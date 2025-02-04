@@ -22,7 +22,7 @@ class RestaurantFavoriteService extends DatabaseService {
       final results = await query(_tableName, where: 'id = ?', whereArgs: [id]);
       if (results.isNotEmpty) {
         print('Favorite with ID "$id" retrieved successfully.');
-        return RestaurantModel.fromJson(results.first);
+        return RestaurantModel.fromSqlite(results.first);
       } else {
         print('No favorite found with ID "$id".');
         return null;
@@ -39,7 +39,7 @@ class RestaurantFavoriteService extends DatabaseService {
       print('database: $database');
       final results = await database.query(_tableName);
       print('Retrieved ${results.length} favorite(s) successfully.');
-      return results.map((json) => RestaurantModel.fromJson(json)).toList();
+      return results.map((json) => RestaurantModel.fromSqlite(json)).toList();
     } catch (e) {
       print('Error retrieving favorites: $e');
       rethrow;
@@ -101,7 +101,7 @@ class RestaurantFavoriteService extends DatabaseService {
             Column(
               name: 'address',
               type: ColumnType.text,
-              constraint: ColumnConstraint.notNull,
+              constraint: ColumnConstraint.nullable,
             ),
             Column(
               name: 'pictureId',
@@ -116,17 +116,17 @@ class RestaurantFavoriteService extends DatabaseService {
             Column(
               name: 'categories',
               type: ColumnType.text,
-              constraint: ColumnConstraint.notNull,
+              constraint: ColumnConstraint.nullable,
             ),
             Column(
               name: 'menus',
               type: ColumnType.text,
-              constraint: ColumnConstraint.notNull,
+              constraint: ColumnConstraint.nullable,
             ),
             Column(
               name: 'customerReviews',
               type: ColumnType.text,
-              constraint: ColumnConstraint.notNull,
+              constraint: ColumnConstraint.nullable,
             ),
           ],
         ),

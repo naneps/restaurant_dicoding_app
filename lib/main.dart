@@ -8,6 +8,7 @@ import 'package:restaurant_dicoding_app/providers/restaurant_detail_provider.dar
 import 'package:restaurant_dicoding_app/providers/restaurant_favorite_provider.dart';
 import 'package:restaurant_dicoding_app/providers/setting_provider.dart';
 import 'package:restaurant_dicoding_app/providers/theme_provider.dart';
+import 'package:restaurant_dicoding_app/services/local_notification_service.dart';
 import 'package:restaurant_dicoding_app/services/local_storage_service.dart';
 import 'package:restaurant_dicoding_app/services/restaurant_favorite_service.dart';
 import 'package:restaurant_dicoding_app/themes/theme.dart';
@@ -17,6 +18,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await LocalStorageService().init();
   await favoriteService.init();
+  await LocalNotificationService().init();
   runApp(const MainApp());
 }
 
@@ -31,19 +33,20 @@ class MainApp extends StatelessWidget {
     MaterialTheme theme = MaterialTheme(textTheme);
     return MultiProvider(
       providers: [
-        Provider.value(
-          value: favoriteService,
+        Provider.value(value: favoriteService),
+        ChangeNotifierProvider(
+          create: (context) => RestaurantProvider(
+            favoriteService: favoriteService,
+          ),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => RestaurantDetailProvider(
+            favoriteService: favoriteService,
+          ),
         ),
         ChangeNotifierProvider(
           create: (context) =>
-              RestaurantProvider(favoriteService: favoriteService),
-        ),
-        ChangeNotifierProvider(
-          create: (context) =>
-              RestaurantDetailProvider(favoriteService: favoriteService),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => RestaurantFavoriteProvider(favoriteService),
+              RestaurantFavoriteProvider(favoriteService)..getFavorites(),
         ),
         ChangeNotifierProvider(create: (_) => SettingProvider()),
         ChangeNotifierProvider(create: (_) => HomeProvider()),

@@ -4,13 +4,16 @@ import 'package:restaurant_dicoding_app/constants/app_constants.dart';
 import 'package:restaurant_dicoding_app/constants/app_routes.dart';
 import 'package:restaurant_dicoding_app/models/restaurant.model.dart';
 import 'package:restaurant_dicoding_app/providers/restaurant.provider.dart';
+import 'package:restaurant_dicoding_app/providers/restaurant_favorite_provider.dart';
 import 'package:restaurant_dicoding_app/widgets/loading_image_widget.dart';
 
 class RestaurantGridItem extends StatelessWidget {
   final RestaurantModel restaurant;
+  final bool showRemoveButton;
   const RestaurantGridItem({
     super.key,
     required this.restaurant,
+    this.showRemoveButton = false,
   });
 
   @override
@@ -110,38 +113,70 @@ class RestaurantGridItem extends StatelessWidget {
                       },
                     ),
                   ),
-                  Tooltip(
-                    message: "Route",
-                    child: IconButton(
-                      visualDensity: VisualDensity.compact,
-                      padding: const EdgeInsets.all(10),
-                      style: IconButton.styleFrom(
-                        minimumSize: Size(30, 30),
-                        fixedSize: Size(30, 30),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        padding: const EdgeInsets.all(0),
-                        visualDensity: VisualDensity.compact,
-                      ),
-                      icon: Icon(
-                        restaurant.isFavorite
-                            ? Icons.favorite
-                            : Icons.favorite_border,
-                      ),
-                      onPressed: () async {
-                        await context
-                            .read<RestaurantProvider>()
-                            .toggleFavorite(restaurant);
+                  if (showRemoveButton)
+                    _ActionButton(
+                      icon: Icons.delete,
+                      restaurant: restaurant,
+                      onPressed: () {
+                        context
+                            .read<RestaurantFavoriteProvider>()
+                            .removeFavorite(restaurant.id!);
                       },
                     ),
-                  )
+                  if (!showRemoveButton)
+                    _ActionButton(
+                      icon: restaurant.isFavorite
+                          ? Icons.favorite
+                          : Icons.favorite_border,
+                      restaurant: restaurant,
+                      onPressed: () {
+                        context
+                            .read<RestaurantProvider>()
+                            .toggleFavorite(restaurant);
+                        context
+                            .read<RestaurantFavoriteProvider>()
+                            .getFavorites();
+                      },
+                    ),
                 ],
               )
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+class _ActionButton extends StatelessWidget {
+  final IconData icon;
+  final RestaurantModel restaurant;
+  final VoidCallback? onPressed;
+
+  const _ActionButton({
+    required this.restaurant,
+    required this.icon,
+    required this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      visualDensity: VisualDensity.compact,
+      padding: const EdgeInsets.all(10),
+      style: IconButton.styleFrom(
+        minimumSize: Size(30, 30),
+        fixedSize: Size(30, 30),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        padding: const EdgeInsets.all(0),
+        visualDensity: VisualDensity.compact,
+      ),
+      icon: Icon(icon),
+      onPressed: () {
+        onPressed!();
+      },
     );
   }
 }

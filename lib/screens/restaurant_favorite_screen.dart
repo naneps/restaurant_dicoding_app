@@ -22,7 +22,6 @@ class RestaurantFavoriteScreen extends StatelessWidget {
           },
           child: Consumer<RestaurantFavoriteProvider>(
             builder: (context, provider, child) {
-              provider.getFavorites();
               return RefreshIndicator(
                 onRefresh: () async {
                   provider.getFavorites();
@@ -68,7 +67,9 @@ class RestaurantFavoriteScreen extends StatelessWidget {
                                   itemBuilder: (context, index) {
                                     final restaurant = state.restaurants[index];
                                     return RestaurantGridItem(
-                                        restaurant: restaurant);
+                                      restaurant: restaurant,
+                                      showRemoveButton: true,
+                                    );
                                   },
                                 );
                               },

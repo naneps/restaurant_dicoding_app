@@ -51,97 +51,108 @@ class MaterialTheme {
   }
 
   ThemeData theme(ColorScheme colorScheme) => ThemeData(
-      useMaterial3: true,
-      brightness: colorScheme.brightness,
-      colorScheme: colorScheme,
-      bottomNavigationBarTheme: BottomNavigationBarThemeData(
-          backgroundColor: colorScheme.surface,
-          selectedItemColor: colorScheme.primary,
-          unselectedItemColor: colorScheme.onSurface,
-          selectedIconTheme: IconThemeData(
-            color: colorScheme.primary,
-          ),
-          unselectedIconTheme: IconThemeData(
-            color: colorScheme.onSurface,
-          ),
-          selectedLabelStyle: textTheme.labelMedium,
-          unselectedLabelStyle: textTheme.labelSmall,
-          landscapeLayout: BottomNavigationBarLandscapeLayout.centered,
-          elevation: 0),
-      textTheme: textTheme.apply(
-        bodyColor: colorScheme.onSurface,
-        displayColor: colorScheme.onSurface,
-      ),
-      appBarTheme: AppBarTheme(
-        backgroundColor: colorScheme.primaryContainer,
-        foregroundColor: colorScheme.onSurface,
-        elevation: 0,
-      ),
-      scaffoldBackgroundColor: colorScheme.surface,
-      inputDecorationTheme: InputDecorationTheme(
-        filled: true,
-        fillColor: colorScheme.surface,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+        useMaterial3: true,
+        brightness: colorScheme.brightness,
+        colorScheme: colorScheme,
+        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+            backgroundColor: colorScheme.surface,
+            selectedItemColor: colorScheme.primary,
+            unselectedItemColor: colorScheme.onSurface,
+            selectedIconTheme: IconThemeData(
+              color: colorScheme.primary,
+            ),
+            unselectedIconTheme: IconThemeData(
+              color: colorScheme.onSurface,
+            ),
+            selectedLabelStyle: textTheme.labelMedium,
+            unselectedLabelStyle: textTheme.labelSmall,
+            landscapeLayout: BottomNavigationBarLandscapeLayout.centered,
+            elevation: 0),
+        textTheme: textTheme.apply(
+          bodyColor: colorScheme.onSurface,
+          displayColor: colorScheme.onSurface,
         ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(
-            color: colorScheme.primary,
+        appBarTheme: AppBarTheme(
+          backgroundColor: colorScheme.primaryContainer,
+          foregroundColor: colorScheme.onSurface,
+          elevation: 0,
+        ),
+        scaffoldBackgroundColor: colorScheme.surface,
+        inputDecorationTheme: InputDecorationTheme(
+          filled: true,
+          fillColor: colorScheme.surface,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: BorderSide(
+              color: colorScheme.primary,
+            ),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: BorderSide(
+              color: colorScheme.onSurface,
+              width: 0.5,
+            ),
           ),
         ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(
+        iconButtonTheme: IconButtonThemeData(
+          style: IconButton.styleFrom(
+            foregroundColor: colorScheme.onSurface,
+            backgroundColor: colorScheme.surface,
+            visualDensity: VisualDensity.compact,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            visualDensity: VisualDensity.compact,
+            elevation: 0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            backgroundColor: colorScheme.primaryContainer,
+            foregroundColor: colorScheme.onPrimaryContainer,
+            textStyle: textTheme.labelMedium,
+          ),
+        ),
+        expansionTileTheme: ExpansionTileThemeData(
+          iconColor: colorScheme.onSurface,
+          textColor: colorScheme.onSurface,
+          collapsedIconColor: colorScheme.onSurface,
+          collapsedTextColor: colorScheme.onSurface,
+          collapsedBackgroundColor: colorScheme.surface,
+          shape: RoundedRectangleBorder(
+              side: BorderSide(
+            style: BorderStyle.none,
+          )),
+        ),
+        canvasColor: colorScheme.surface,
+        chipTheme: ChipThemeData(
+          backgroundColor: colorScheme.surfaceContainer,
+          secondaryLabelStyle: textTheme.labelMedium,
+          selectedColor: colorScheme.primaryContainer,
+          side: BorderSide(
             color: colorScheme.onSurface,
             width: 0.5,
           ),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
         ),
-      ),
-      iconButtonTheme: IconButtonThemeData(
-        style: IconButton.styleFrom(
-          foregroundColor: colorScheme.onSurface,
-          backgroundColor: colorScheme.surface,
-          visualDensity: VisualDensity.compact,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-        ),
-      ),
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          visualDensity: VisualDensity.compact,
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-          backgroundColor: colorScheme.primaryContainer,
-          foregroundColor: colorScheme.onPrimaryContainer,
-          textStyle: textTheme.labelMedium,
-        ),
-      ),
-      expansionTileTheme: ExpansionTileThemeData(
-        iconColor: colorScheme.onSurface,
-        textColor: colorScheme.onSurface,
-        collapsedIconColor: colorScheme.onSurface,
-        collapsedTextColor: colorScheme.onSurface,
-        collapsedBackgroundColor: colorScheme.surface,
-        shape: RoundedRectangleBorder(
-            side: BorderSide(
-          style: BorderStyle.none,
-        )),
-      ),
-      canvasColor: colorScheme.surface,
-      chipTheme: ChipThemeData(
-        backgroundColor: colorScheme.surfaceContainer,
-        secondaryLabelStyle: textTheme.labelMedium,
-        selectedColor: colorScheme.primaryContainer,
-        side: BorderSide(
-          color: colorScheme.onSurface,
-          width: 0.5,
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      ));
+        switchTheme: SwitchThemeData(
+            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            thumbColor: WidgetStateProperty.all(colorScheme.primary),
+            trackColor: WidgetStateProperty.all(colorScheme.surfaceContainer),
+            trackOutlineColor: WidgetStateProperty.all(
+              colorScheme.onSurfaceVariant,
+            ),
+            overlayColor: WidgetStateProperty.all(
+              colorScheme.onSurfaceVariant,
+            )),
+      );
 
   static ColorScheme darkScheme() {
     return const ColorScheme(

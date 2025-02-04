@@ -1,1 +1,1 @@
-enum KeyStorage { theme }
+enum KeyStorage { theme, notificationReminder }
