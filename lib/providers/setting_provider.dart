@@ -10,15 +10,28 @@ class SettingProvider extends ChangeNotifier {
   final LocalStorageService _localStorageService = LocalStorageService();
 
   void enableNotification(bool value) async {
+    print(value);
     await _localStorageService.saveBool(
-        KeyStorage.notificationReminder.name, value);
+      KeyStorage.notificationReminder.name,
+      value,
+    );
     if (value) {
-      await _localNotificationService.scheduleDailyNotification();
+      await _localNotificationService.showNotification(
+          id: 1, title: "test", body: "tes", payload: "tes");
       isNotificationEnabled = true;
     } else {
-      _localNotificationService.cancelNotification();
+      //   _localNotificationService.cancelNotification(
+      //     id: 1,
+      //   );
       isNotificationEnabled = false;
     }
+    notifyListeners();
+  }
+
+  Future<void> init() async {
+    isNotificationEnabled =
+        _localStorageService.getBool(KeyStorage.notificationReminder.name) ??
+            false;
     notifyListeners();
   }
 }

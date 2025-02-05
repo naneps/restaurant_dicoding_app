@@ -24,6 +24,7 @@ RestaurantModel _$RestaurantModelFromJson(Map<String, dynamic> json) =>
       customerReviews: (json['customerReviews'] as List<dynamic>?)
           ?.map((e) => CustomerReview.fromJson(e as Map<String, dynamic>))
           .toList(),
+      isFavorite: json['isFavorite'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$RestaurantModelToJson(RestaurantModel instance) =>

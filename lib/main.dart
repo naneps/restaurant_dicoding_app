@@ -48,7 +48,7 @@ class MainApp extends StatelessWidget {
           create: (context) =>
               RestaurantFavoriteProvider(favoriteService)..getFavorites(),
         ),
-        ChangeNotifierProvider(create: (_) => SettingProvider()),
+        ChangeNotifierProvider(create: (_) => SettingProvider()..init()),
         ChangeNotifierProvider(create: (_) => HomeProvider()),
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => FilterProvider()),
