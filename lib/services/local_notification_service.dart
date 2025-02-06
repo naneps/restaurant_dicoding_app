@@ -1,187 +1,162 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_timezone/flutter_timezone.dart';
-// import 'package:notification_app/models/received_notification.dart';
-// import 'package:notification_app/services/http_service.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
-// final StreamController<ReceivedNotification> didReceiveLocalNotificationStream =
-//     StreamController<ReceivedNotification>.broadcast();
-
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
-
-// final StreamController<String?> selectNotificationStream =
-//     StreamController<String?>.broadcast();
-
 class LocalNotificationService {
-//   final HttpService httpService;
+  final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin(); // Instance lokal
 
-  LocalNotificationService();
-
-  // todo-01-notif-06: add function to cancel a notification by id
-  Future<void> cancelNotification(int id) async {
-    await flutterLocalNotificationsPlugin.cancel(id);
+  LocalNotificationService() {
+    init();
   }
 
-  Future<void> configureLocalTimeZone() async {
-    tz.initializeTimeZones();
-    final String timeZoneName = await FlutterTimezone.getLocalTimezone();
-    tz.setLocalLocation(tz.getLocation(timeZoneName));
+  Future<void> cancelAllNotifications() async {
+    await _flutterLocalNotificationsPlugin.cancelAll();
+  }
+
+  Future<void> cancelNotification(int id) async {
+    await _flutterLocalNotificationsPlugin.cancel(id);
+  }
+
+  Future<List<PendingNotificationRequest>> getScheduledNotifications() async {
+    return await _flutterLocalNotificationsPlugin.pendingNotificationRequests();
   }
 
   Future<void> init() async {
+    tz.initializeTimeZones();
+    await _requestNotificationPermission();
+
     const initializationSettingsAndroid = AndroidInitializationSettings(
       '@mipmap/ic_launcher',
     );
 
     final initializationSettingsDarwin = DarwinInitializationSettings(
-      requestAlertPermission: false,
-      requestBadgePermission: false,
-      requestSoundPermission: false,
+      requestAlertPermission: true,
+      requestBadgePermission: true,
+      requestSoundPermission: true,
     );
 
     final initializationSettings = InitializationSettings(
       android: initializationSettingsAndroid,
       iOS: initializationSettingsDarwin,
     );
-    await flutterLocalNotificationsPlugin.initialize(
+
+    await _flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
       onDidReceiveNotificationResponse: (notificationResponse) {
         final payload = notificationResponse.payload;
         if (payload != null && payload.isNotEmpty) {
-          //   selectNotificationStream.add(payload);
+          // Handle notification tap
         }
       },
     );
   }
 
-  Future<List<PendingNotificationRequest>> pendingNotificationRequests() async {
-    final List<PendingNotificationRequest> pendingNotificationRequests =
-        await flutterLocalNotificationsPlugin.pendingNotificationRequests();
-    return pendingNotificationRequests;
-  }
-
-  Future<bool?> requestPermissions() async {
-    if (defaultTargetPlatform == TargetPlatform.iOS) {
-      final iOSImplementation =
-          flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<
-              IOSFlutterLocalNotificationsPlugin>();
-      return await iOSImplementation?.requestPermissions(
-        alert: true,
-        badge: true,
-        sound: true,
-      );
-    } else if (defaultTargetPlatform == TargetPlatform.android) {
-      final notificationEnabled = await _isAndroidPermissionGranted();
-      final requestAlarmEnabled = await _requestExactAlarmsPermission();
-      if (!notificationEnabled) {
-        final requestNotificationsPermission =
-            await _requestAndroidNotificationsPermission();
-        return requestNotificationsPermission && requestAlarmEnabled;
-      }
-      return notificationEnabled && requestAlarmEnabled;
-    } else {
-      return false;
-    }
-  }
-
-  // todo-01-notif-04: add function to schedule notification
-  Future<void> scheduleDailyTenAMNotification({
+  Future<void> scheduleDailyNotification({
     required int id,
-    String channelId = "3",
-    String channelName = "Schedule Notification",
+    required String title,
+    required String body,
+    String channelId = "1",
+    String channelName = "Scheduled Notification",
   }) async {
-    final androidPlatformChannelSpecifics = AndroidNotificationDetails(
-      channelId,
-      channelName,
-      importance: Importance.max,
-      priority: Priority.high,
-      ticker: 'ticker',
-    );
-    const iOSPlatformChannelSpecifics = DarwinNotificationDetails();
+    try {
+      final androidPlatformChannelSpecifics = AndroidNotificationDetails(
+        channelId,
+        channelName,
+        importance: Importance.max,
+        priority: Priority.high,
+        ticker: 'ticker',
+      );
+      const iOSPlatformChannelSpecifics = DarwinNotificationDetails();
 
-    final notificationDetails = NotificationDetails(
-      android: androidPlatformChannelSpecifics,
-      iOS: iOSPlatformChannelSpecifics,
-    );
+      final notificationDetails = NotificationDetails(
+        android: androidPlatformChannelSpecifics,
+        iOS: iOSPlatformChannelSpecifics,
+      );
 
-    final datetimeSchedule = _scheduleDateTime();
+      final datetimeSchedule = _scheduleDateTime();
 
-    await flutterLocalNotificationsPlugin.zonedSchedule(
-      id,
-      'Daily scheduled notification title',
-      'This is a body of daily scheduled notification',
-      datetimeSchedule,
-      notificationDetails,
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
-      matchDateTimeComponents: DateTimeComponents.time,
-    );
+      await _flutterLocalNotificationsPlugin.zonedSchedule(
+        id,
+        title,
+        body,
+        datetimeSchedule,
+        notificationDetails,
+        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
+        matchDateTimeComponents: DateTimeComponents.time,
+      );
+    } catch (e) {
+      print("Error scheduling notification: $e");
+    }
   }
 
   Future<void> showNotification({
     required int id,
     required String title,
     required String body,
-    required String payload,
     String channelId = "1",
-    String channelName = "Simple Notification",
+    String channelName = "Default",
   }) async {
-    final androidPlatformChannelSpecifics = AndroidNotificationDetails(
-      channelId, channelName,
-      importance: Importance.max, priority: Priority.high,
-      //   sound: const RawResourceAndroidNotificationSound('slow_spring_board'),
-    );
-    const iOSPlatformChannelSpecifics = DarwinNotificationDetails(
-      presentSound: true,
-    );
-    final notificationDetails = NotificationDetails(
-      android: androidPlatformChannelSpecifics,
-      iOS: iOSPlatformChannelSpecifics,
-    );
-    await flutterLocalNotificationsPlugin.show(
+    await _flutterLocalNotificationsPlugin.show(
       id,
       title,
       body,
-      notificationDetails,
-      payload: payload,
+      NotificationDetails(
+        android: AndroidNotificationDetails(
+          channelId,
+          channelName,
+          importance: Importance.max,
+          priority: Priority.high,
+        ),
+        iOS: const DarwinNotificationDetails(
+          presentAlert: true,
+          presentBadge: true,
+          presentSound: true,
+        ),
+      ),
     );
   }
 
-  Future<bool> _isAndroidPermissionGranted() async {
-    return await flutterLocalNotificationsPlugin
-            .resolvePlatformSpecificImplementation<
-                AndroidFlutterLocalNotificationsPlugin>()
-            ?.areNotificationsEnabled() ??
-        false;
-  }
+  Future<void> _requestNotificationPermission() async {
+    if (await Permission.notification.isDenied ||
+        await Permission.notification.isPermanentlyDenied) {
+      await Permission.notification.request();
+    }
+// enable schedule notification
+    await _flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
+        ?.createNotificationChannelGroup(
+          AndroidNotificationChannelGroup(
+            'default',
+            'Default',
+          ),
+        );
 
-  Future<bool> _requestAndroidNotificationsPermission() async {
-    return await flutterLocalNotificationsPlugin
-            .resolvePlatformSpecificImplementation<
-                AndroidFlutterLocalNotificationsPlugin>()
-            ?.requestNotificationsPermission() ??
-        false;
-  }
-
-  // todo-01-notif-03: add a request
-  Future<bool> _requestExactAlarmsPermission() async {
-    return await flutterLocalNotificationsPlugin
-            .resolvePlatformSpecificImplementation<
-                AndroidFlutterLocalNotificationsPlugin>()
-            ?.requestExactAlarmsPermission() ??
-        false;
+    await _flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
+        ?.createNotificationChannel(
+          const AndroidNotificationChannel(
+            '1',
+            'Scheduled Notification',
+            description: 'Scheduled Notification',
+            importance: Importance.max,
+            enableVibration: true,
+            enableLights: true,
+          ),
+        );
   }
 
   tz.TZDateTime _scheduleDateTime() {
     final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
     tz.TZDateTime scheduledDate =
-        tz.TZDateTime(tz.local, now.year, now.month, now.day, 10, 0);
+        tz.TZDateTime(tz.local, now.year, now.month, now.day, 16, 22);
     if (scheduledDate.isBefore(now)) {
       scheduledDate = scheduledDate.add(const Duration(days: 1));
     }

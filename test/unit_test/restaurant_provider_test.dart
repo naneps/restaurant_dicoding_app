@@ -7,7 +7,7 @@ import 'package:restaurant_dicoding_app/providers/states/restaurant_state.dart';
 import 'package:restaurant_dicoding_app/repositories/restaurant_repository.dart';
 import 'package:restaurant_dicoding_app/services/restaurant_favorite_service.dart';
 
-import 'restaurant_provider_test.mocks.dart';
+import '../mocks/restaurant_provider_test.mocks.dart';
 
 @GenerateMocks([RestaurantRepository, RestaurantFavoriteService])
 void main() {

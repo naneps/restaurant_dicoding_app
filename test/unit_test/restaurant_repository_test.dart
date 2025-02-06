@@ -7,7 +7,7 @@ import 'package:mockito/mockito.dart';
 import 'package:restaurant_dicoding_app/repositories/restaurant_repository.dart';
 import 'package:restaurant_dicoding_app/services/restaurant_service.dart';
 
-import 'restaurant_repository_test.mocks.dart';
+import '../mocks/restaurant_repository_test.mocks.dart';
 
 @GenerateMocks([RestaurantService])
 void main() {

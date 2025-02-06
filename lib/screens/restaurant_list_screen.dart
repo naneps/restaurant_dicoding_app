@@ -66,7 +66,9 @@ class RestaurantListScreen extends StatelessWidget {
                       builder: (context, provider, child) {
                         final state = provider.state;
                         if (state is RestaurantLoadingState) {
-                          return SliverFillRemaining(child: LoadingWidget());
+                          return SliverFillRemaining(
+                            child: LoadingWidget(),
+                          );
                         } else if (state is RestaurantLoadedState) {
                           return SliverLayoutBuilder(
                               builder: (context, constraints) {
