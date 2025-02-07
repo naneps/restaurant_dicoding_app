@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant_dicoding_app/providers/setting_provider.dart';
 import 'package:restaurant_dicoding_app/widgets/switch_button_theme.dart';
@@ -14,84 +13,106 @@ class SettingScreen extends StatelessWidget {
         title: const Text('Setting'),
         forceMaterialTransparency: true,
       ),
-      body: Consumer<SettingProvider>(builder: (context, provider, child) {
-        return Column(
-          children: [
-            ListTile(
-              leading: Icon(
-                Icons.palette,
-                color: Theme.of(context).colorScheme.primaryContainer,
+      body: Consumer<SettingProvider>(
+        builder: (context, provider, child) {
+          return Column(
+            children: [
+              ListTile(
+                leading: Icon(
+                  Icons.palette,
+                  color: Theme.of(context).colorScheme.primaryContainer,
+                ),
+                title: Text(
+                  'Theme',
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
+                trailing: SizedBox(
+                  width: 200,
+                  child: SwitchButtonTheme(),
+                ),
               ),
-              title: Text(
-                'Theme',
-                style: Theme.of(context).textTheme.titleSmall,
-              ),
-              trailing: SizedBox(
-                width: 200,
-                child: SwitchButtonTheme(),
-              ),
-            ),
-            ListTile(
-              title: Text(
-                'Notification Reminder',
-                style: Theme.of(context).textTheme.titleSmall,
-              ),
-              subtitle: Text(
-                'Enable Notification For Reminder Launch',
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-              leading: Icon(
-                Icons.notifications,
-                color: Theme.of(context).colorScheme.primaryContainer,
-              ),
-              trailing: Switch(
-                value: provider.isNotificationEnabled,
-                onChanged: (value) {
-                  provider.enableNotification(value);
+              ListTile(
+                title: Text(
+                  'Notification Reminder',
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
+                subtitle: Text(
+                  'Enable Notification For Reminder Launch',
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+                leading: Icon(
+                  Icons.notifications,
+                  color: Theme.of(context).colorScheme.primaryContainer,
+                ),
+                trailing: Switch(
+                  value: provider.isNotificationEnabled,
+                  onChanged: (value) {
+                    provider.enableNotification(value);
+                  },
+                ),
+                onTap: () {
+                  showPendingNotification(context);
                 },
               ),
-            ),
-            OutlinedButton(
-              onPressed: () {
-                provider.showNotification();
-              },
-              child: const Text(
-                'Test Notification',
-              ),
-            ),
-            // Menampilkan daftar notifikasi yang dijadwalkan
-            FutureBuilder<List<PendingNotificationRequest>>(
-              future: provider.getScheduledNotifications(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator();
-                }
-                if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                }
-                if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return const Text("No scheduled notifications.");
-                }
-
-                final notifications = snapshot.data!;
-                return ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: notifications.length,
-                  itemBuilder: (context, index) {
-                    final notification = notifications[index];
-                    return ListTile(
-                      title: Text(notification.title ?? 'No Title'),
-                      subtitle: Text(notification.body ?? 'No Body'),
-                      leading: const Icon(Icons.notifications),
-                      trailing: Text(notification.id.toString()),
-                    );
+              OutlinedButton(
+                  onPressed: () {
+                    provider.showBigPictureNotification();
                   },
-                );
-              },
-            )
-          ],
-        );
-      }),
+                  child: Text('Logout'))
+            ],
+          );
+        },
+      ),
+    );
+  }
+
+  void showPendingNotification(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        title: const Text('Pending NOtification'),
+        backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
+        elevation: 0,
+        contentPadding: EdgeInsets.all(10),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        titleTextStyle: Theme.of(context).textTheme.titleSmall,
+        content: SizedBox(
+          width: 350,
+          height: 200,
+          child: FutureBuilder(
+            future: context.read<SettingProvider>().getScheduledNotifications(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                return const Center(child: Text('No Notification Scheduled'));
+              }
+              final data = snapshot.data!;
+              return ListView.builder(
+                physics: const BouncingScrollPhysics(),
+                itemCount: data.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text(data[index].title ?? 'No Title'),
+                    subtitle: Text(data[index].body ?? 'No Body'),
+                  );
+                },
+              );
+            },
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('OK'),
+          ),
+        ],
+      ),
     );
   }
 }

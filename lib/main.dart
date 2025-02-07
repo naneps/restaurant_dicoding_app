@@ -11,20 +11,21 @@ import 'package:restaurant_dicoding_app/providers/theme_provider.dart';
 import 'package:restaurant_dicoding_app/services/local_notification_service.dart';
 import 'package:restaurant_dicoding_app/services/local_storage_service.dart';
 import 'package:restaurant_dicoding_app/services/restaurant_favorite_service.dart';
+import 'package:restaurant_dicoding_app/services/work_manager_service.dart';
 import 'package:restaurant_dicoding_app/themes/theme.dart';
 import 'package:restaurant_dicoding_app/themes/util.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await LocalStorageService().init();
-  await favoriteService.init();
-  await LocalNotificationService().init();
+  WorkManagerService.init();
+  WorkManagerService.registerDailyTask();
+
   runApp(const MainApp());
 }
 
-final favoriteService = RestaurantFavoriteService();
-
 class MainApp extends StatelessWidget {
+  static final GlobalKey<NavigatorState> navigatorKey =
+      GlobalKey<NavigatorState>();
   const MainApp({super.key});
 
   @override
@@ -33,22 +34,32 @@ class MainApp extends StatelessWidget {
     MaterialTheme theme = MaterialTheme(textTheme);
     return MultiProvider(
       providers: [
-        Provider.value(value: favoriteService),
+        Provider(create: (_) => RestaurantFavoriteService()..init()),
+        Provider(create: (_) => LocalNotificationService()),
+        Provider(create: (_) => LocalStorageService()..init()),
         ChangeNotifierProvider(
           create: (context) => RestaurantProvider(
-            favoriteService: favoriteService,
+            favoriteService: context.read<RestaurantFavoriteService>(),
           ),
         ),
         ChangeNotifierProvider(
           create: (context) => RestaurantDetailProvider(
-            favoriteService: favoriteService,
+            favoriteService: context.read<RestaurantFavoriteService>(),
           ),
         ),
         ChangeNotifierProvider(
-          create: (context) =>
-              RestaurantFavoriteProvider(favoriteService)..getFavorites(),
+          create: (context) {
+            return RestaurantFavoriteProvider(
+              context.read<RestaurantFavoriteService>(),
+            );
+          },
         ),
-        ChangeNotifierProvider(create: (_) => SettingProvider()..init()),
+        ChangeNotifierProvider(
+            create: (context) => SettingProvider(
+                  localStorageService: context.read<LocalStorageService>(),
+                  localNotificationService:
+                      context.read<LocalNotificationService>(),
+                )..init()),
         ChangeNotifierProvider(create: (_) => HomeProvider()),
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => FilterProvider()),
@@ -56,6 +67,7 @@ class MainApp extends StatelessWidget {
       child: Consumer<ThemeProvider>(
         builder: (context, provider, child) {
           return MaterialApp(
+            navigatorKey: navigatorKey,
             debugShowCheckedModeBanner: false,
             title: 'Dicoding Restaurant',
             theme: theme.light(),

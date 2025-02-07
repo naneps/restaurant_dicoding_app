@@ -1,0 +1,4 @@
+-keep class androidx.work.** { *; }
+-keep class com.dexterous.flutterlocalnotifications.** { *; }
+-dontwarn androidx.work.**
+-dontwarn com.dexterous.flutterlocalnotifications.**

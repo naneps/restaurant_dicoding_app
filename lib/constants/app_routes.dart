@@ -21,6 +21,7 @@ class AppRoutes {
         return MaterialPageRoute(
           builder: (context) =>
               RestaurantDetailScreen(id: settings.arguments as String),
+          settings: settings,
         );
       default:
         return MaterialPageRoute(
