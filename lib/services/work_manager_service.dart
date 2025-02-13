@@ -23,7 +23,7 @@ void callbackDispatcher() {
         await notificationService.init();
         await notificationService.showBigPictureNotification(
           id: DateTime.now().millisecondsSinceEpoch.remainder(100000),
-          title: "Coba restoran ini: <b>${randomRestaurant.name}</b>",
+          title: "Recommended Restaurant: <b>${randomRestaurant.name}</b>",
           body: randomRestaurant.description ?? '',
           payload: jsonEncode(
             {'type': 'restaurant_detail', 'id': randomRestaurant.id},
@@ -52,7 +52,7 @@ class WorkManagerService {
       "fetch_restaurant_notification",
       fetchBackgroundTask,
       frequency: const Duration(minutes: 15),
-      initialDelay: const Duration(seconds: 1),
+      initialDelay: const Duration(seconds: 3),
       constraints: Constraints(
         networkType: NetworkType.connected,
       ),

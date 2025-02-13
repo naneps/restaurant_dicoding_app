@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -7,6 +8,8 @@ import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:restaurant_dicoding_app/constants/app_routes.dart';
+import 'package:restaurant_dicoding_app/main.dart';
 import 'package:restaurant_dicoding_app/models/notification.model.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
@@ -42,9 +45,7 @@ class LocalNotificationService {
 
   Future<void> init() async {
     try {
-      // Pastikan timezone sudah diinisialisasi
       await configureLocalTimeZone();
-      // Request permission sebelum inisialisasi
       await _requestNotificationPermission();
 
       const initializationSettingsAndroid = AndroidInitializationSettings(
@@ -68,6 +69,15 @@ class LocalNotificationService {
         onDidReceiveNotificationResponse: (notificationResponse) {
           final payload = notificationResponse.payload;
           if (payload != null && payload.isNotEmpty) {
+            print("🔔 Payload: $payload");
+            final data = jsonDecode(payload);
+            if (data['type'] == 'restaurant_detail') {
+              MainApp.navigatorKey.currentState?.pushNamed(
+                AppRoutes.restaurantDetail,
+                arguments: data['id'],
+              );
+            }
+
             selectNotificationStream.add(payload);
           }
         },
@@ -177,6 +187,10 @@ class LocalNotificationService {
         BigTextStyleInformation(
       body,
       htmlFormatContent: true,
+      htmlFormatTitle: true,
+      htmlFormatSummaryText: true,
+      htmlFormatBigText: true,
+      summaryText: body,
     );
 
     final androidDetails = AndroidNotificationDetails(

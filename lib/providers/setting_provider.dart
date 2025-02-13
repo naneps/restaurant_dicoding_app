@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -54,7 +53,7 @@ class SettingProvider extends ChangeNotifier {
       title: "Test Notification",
       body: "This is a test notification",
       imageUrl: 'https://picsum.photos/200/300',
-      payload: jsonEncode({'type': 'test'}),
+      payload: "s1knt6za9kkfw1e867",
     );
   }
 

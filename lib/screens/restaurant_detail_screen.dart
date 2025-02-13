@@ -31,7 +31,7 @@ class RestaurantDetailScreen extends StatelessWidget {
         tag: id,
         child: Scaffold(
           appBar: AppBar(
-            title: const Text('Detail '),
+            title: Text('Detail'),
             forceMaterialTransparency: true,
             centerTitle: true,
             actions: [
