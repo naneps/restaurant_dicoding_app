@@ -92,7 +92,6 @@ class RestaurantProvider extends ChangeNotifier {
 
   Future<void> toggleFavorite(RestaurantModel restaurant) async {
     try {
-      print("Restaurant isFavorite: $restaurant");
       if (restaurant.isFavorite) {
         await favoriteService.deleteFavorite(restaurant.id!);
       } else {
@@ -112,7 +111,6 @@ class RestaurantProvider extends ChangeNotifier {
         notifyListeners();
       }
     } catch (e) {
-      print('Error toggling favorite: $e');
     }
   }
 }

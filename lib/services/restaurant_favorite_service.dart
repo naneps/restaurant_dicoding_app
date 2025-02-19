@@ -10,9 +10,7 @@ class RestaurantFavoriteService extends DatabaseService {
   Future<void> deleteFavorite(String id) async {
     try {
       await delete(_tableName, where: 'id = ?', whereArgs: [id]);
-      print('Favorite with ID "$id" deleted successfully.');
     } catch (e) {
-      print('Error deleting favorite with ID "$id": $e');
       rethrow;
     }
   }
@@ -21,27 +19,20 @@ class RestaurantFavoriteService extends DatabaseService {
     try {
       final results = await query(_tableName, where: 'id = ?', whereArgs: [id]);
       if (results.isNotEmpty) {
-        print('Favorite with ID "$id" retrieved successfully.');
         return RestaurantModel.fromSqlite(results.first);
       } else {
-        print('No favorite found with ID "$id".');
         return null;
       }
     } catch (e) {
-      print('Error retrieving favorite with ID "$id": $e');
       rethrow;
     }
   }
 
   Future<List<RestaurantModel>> getFavorites() async {
     try {
-      print('Retrieving favorites...');
-      print('database: $database');
       final results = await database.query(_tableName);
-      print('Retrieved ${results.length} favorite(s) successfully.');
       return results.map((json) => RestaurantModel.fromSqlite(json)).toList();
     } catch (e) {
-      print('Error retrieving favorites: $e');
       rethrow;
     }
   }
@@ -49,9 +40,7 @@ class RestaurantFavoriteService extends DatabaseService {
   Future<void> insertFavorite(RestaurantModel restaurant) async {
     try {
       await insert(_tableName, restaurant.toMap());
-      print('Favorite inserted successfully with data: ${restaurant.toJson()}');
     } catch (e) {
-      print('Error inserting favorite: $e');
       rethrow;
     }
   }
@@ -65,7 +54,6 @@ class RestaurantFavoriteService extends DatabaseService {
       );
       return results.isNotEmpty;
     } catch (e) {
-      print('Error checking favorite: $e');
       rethrow;
     }
   }
@@ -131,9 +119,7 @@ class RestaurantFavoriteService extends DatabaseService {
           ],
         ),
       );
-      print('Table "$_tableName" created successfully.');
     } catch (e) {
-      print('Error creating table ON RESTAURANT SERVICE "$_tableName": $e');
       rethrow;
     }
   }

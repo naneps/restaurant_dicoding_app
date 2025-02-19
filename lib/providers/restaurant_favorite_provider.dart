@@ -12,7 +12,6 @@ class RestaurantFavoriteProvider extends ChangeNotifier {
   void getFavorites() async {
     try {
       final result = await _favoriteService.getFavorites();
-      print('getFavorites: $result');
       if (result.isEmpty) {
         _restaurantState = RestaurantEmptyState();
         notifyListeners();

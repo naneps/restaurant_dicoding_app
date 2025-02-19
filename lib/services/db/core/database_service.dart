@@ -17,21 +17,15 @@ class DatabaseService {
       final db = database;
       await db.close();
     } catch (e) {
-      print('Error closing database: $e');
       rethrow; // Melemparkan exception kembali jika diperlukan
     }
   }
 
   Future<void> createTable(Database db, Table table) async {
     try {
-      //   print('Creating table: $table');
-      print('SQL Definition: ${table.sqlDefinition()}');
 
-      print('Database: $db');
       await db.execute(table.sqlDefinition());
-      print('Table created successfully');
     } catch (e) {
-      print('Error creating table: $e');
       rethrow;
     }
   }
@@ -49,7 +43,6 @@ class DatabaseService {
         whereArgs: whereArgs,
       );
     } catch (e) {
-      print('Error deleting data: $e');
       rethrow;
     }
   }
@@ -58,28 +51,23 @@ class DatabaseService {
     try {
       _database = await initDatabase();
     } catch (e) {
-      print('Error initializing database: $e');
       rethrow;
     }
   }
 
   Future<Database> initDatabase() async {
     try {
-      print('Initializing database');
       final dbPath = await getDatabasesPath();
       final path = join(dbPath, databaseName);
-      print('Database path: $path');
       return await openDatabase(
         path,
         version: databaseVersion,
         onCreate: (Database database, int version) {
-          print('Creating tables...');
 
           onCreate(database, version);
         },
       );
     } catch (e) {
-      print('Error initializing database: $e');
       rethrow;
     }
   }
@@ -89,7 +77,6 @@ class DatabaseService {
       final db = database;
       return await db.insert(tableName, data);
     } catch (e) {
-      print('Error inserting data: $e');
       rethrow;
     }
   }
@@ -104,9 +91,7 @@ class DatabaseService {
 
   Future<void> onCreate(Database db, int version) async {
     try {
-      print('Creating tables...');
     } catch (e) {
-      print('Error in _onCreate ON DATABASE SERVICE: $e');
       rethrow;
     }
   }
@@ -130,7 +115,6 @@ class DatabaseService {
         limit: limit,
       );
     } catch (e) {
-      print('Error querying data ON DATABASE SERVICE $tableName $database: $e');
       rethrow;
     }
   }
@@ -150,7 +134,6 @@ class DatabaseService {
         whereArgs: whereArgs,
       );
     } catch (e) {
-      print('Error updating data: $e');
       rethrow;
     }
   }

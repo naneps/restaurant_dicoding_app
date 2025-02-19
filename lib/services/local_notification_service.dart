@@ -63,13 +63,11 @@ class LocalNotificationService {
         iOS: initializationSettingsDarwin,
       );
 
-      // Inisialisasi notifikasi dengan callback saat diklik
       await flutterLocalNotificationsPlugin.initialize(
         initializationSettings,
         onDidReceiveNotificationResponse: (notificationResponse) {
           final payload = notificationResponse.payload;
           if (payload != null && payload.isNotEmpty) {
-            print("🔔 Payload: $payload");
             final data = jsonDecode(payload);
             if (data['type'] == 'restaurant_detail') {
               MainApp.navigatorKey.currentState?.pushNamed(
@@ -83,9 +81,7 @@ class LocalNotificationService {
         },
       );
 
-      print("🔔 LocalNotificationService initialized successfully");
     } catch (e) {
-      print("⚠️ Error initializing notifications: $e");
     }
   }
 
@@ -126,7 +122,6 @@ class LocalNotificationService {
         matchDateTimeComponents: DateTimeComponents.time,
       );
     } catch (e) {
-      print("Error scheduling notification: $e");
     }
   }
 
@@ -242,7 +237,6 @@ class LocalNotificationService {
     );
   }
 
-  /// **Method untuk download gambar dari URL dan simpan ke file lokal**
   Future<String?> _downloadAndSaveFile(String url, String filename) async {
     try {
       final response = await http.get(Uri.parse(url));
@@ -254,7 +248,6 @@ class LocalNotificationService {
         return filePath;
       }
     } catch (e) {
-      print('Error downloading image: $e');
     }
     return null;
   }
