@@ -26,10 +26,7 @@ class SettingScreen extends StatelessWidget {
                   'Theme',
                   style: Theme.of(context).textTheme.titleSmall,
                 ),
-                trailing: SizedBox(
-                  width: 200,
-                  child: SwitchButtonTheme(),
-                ),
+                trailing: SizedBox(width: 200, child: SwitchButtonTheme()),
               ),
               ListTile(
                 title: Text(
@@ -54,11 +51,11 @@ class SettingScreen extends StatelessWidget {
                   showPendingNotification(context);
                 },
               ),
-              OutlinedButton(
-                  onPressed: () {
-                    provider.showBigPictureNotification();
-                  },
-                  child: Text('Logout'))
+              //   OutlinedButton(
+              //       onPressed: () {
+              //         provider.showBigPictureNotification();
+              //       },
+              //       child: Text('Logout'))
             ],
           );
         },
@@ -70,49 +67,55 @@ class SettingScreen extends StatelessWidget {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) => AlertDialog(
-        title: const Text('Pending NOtification'),
-        backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
-        elevation: 0,
-        contentPadding: EdgeInsets.all(10),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        titleTextStyle: Theme.of(context).textTheme.titleSmall,
-        content: SizedBox(
-          width: 350,
-          height: 200,
-          child: FutureBuilder(
-            future: context.read<SettingProvider>().getScheduledNotifications(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                return Center(child: Text('Error: ${snapshot.error}'));
-              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return const Center(child: Text('No Notification Scheduled'));
-              }
-              final data = snapshot.data!;
-              return ListView.builder(
-                physics: const BouncingScrollPhysics(),
-                itemCount: data.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(data[index].title ?? 'No Title'),
-                    subtitle: Text(data[index].body ?? 'No Body'),
+      builder:
+          (context) => AlertDialog(
+            title: const Text('Pending NOtification'),
+            backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
+            elevation: 0,
+            contentPadding: EdgeInsets.all(10),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            titleTextStyle: Theme.of(context).textTheme.titleSmall,
+            content: SizedBox(
+              width: 350,
+              height: 200,
+              child: FutureBuilder(
+                future:
+                    context.read<SettingProvider>().getScheduledNotifications(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return const Center(
+                      child: Text('No Notification Scheduled'),
+                    );
+                  }
+                  final data = snapshot.data!;
+                  return ListView.builder(
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: data.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        title: Text(data[index].title ?? 'No Title'),
+                        subtitle: Text(data[index].body ?? 'No Body'),
+                      );
+                    },
                   );
                 },
-              );
-            },
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('OK'),
+              ),
+            ],
           ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: const Text('OK'),
-          ),
-        ],
-      ),
     );
   }
 }

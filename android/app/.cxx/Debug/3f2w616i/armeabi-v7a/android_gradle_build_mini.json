@@ -1,0 +1,20 @@
+{
+  "buildFiles": [
+    "C:\\Users\\DEV_Flutter\\dev\\flutter\\packages\\flutter_tools\\gradle\\src\\main\\groovy\\CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "C:\\Users\\DEV_Flutter\\AppData\\Local\\Android\\sdk\\cmake\\3.22.1\\bin\\ninja.exe",
+      "-C",
+      "D:\\DICODING\\restaurant_dicoding_app\\android\\app\\.cxx\\Debug\\3f2w616i\\armeabi-v7a",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "C:\\Users\\DEV_Flutter\\AppData\\Local\\Android\\sdk\\cmake\\3.22.1\\bin\\ninja.exe",
+    "-C",
+    "D:\\DICODING\\restaurant_dicoding_app\\android\\app\\.cxx\\Debug\\3f2w616i\\armeabi-v7a",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {}
+}
