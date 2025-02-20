@@ -19,6 +19,7 @@ void main() {
   group('MainApp Tests', () {
     testWidgets('should load properly', (WidgetTester tester) async {
       await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
       expect(find.byType(MainApp), findsOneWidget);
     });
 
