@@ -5,9 +5,7 @@ import 'package:restaurant_dicoding_app/providers/states/restaurant_state.dart';
 import 'package:restaurant_dicoding_app/widgets/filter_widget.dart';
 
 class SearchRestaurantWidget extends StatelessWidget {
-  const SearchRestaurantWidget({
-    super.key,
-  });
+  const SearchRestaurantWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -58,11 +56,8 @@ class SearchRestaurantWidget extends StatelessWidget {
                       backgroundColor: Colors.transparent,
                     );
                   },
-                  icon: Icon(
-                    Icons.filter_list,
-                    size: 20,
-                  ),
-                )
+                  icon: Icon(Icons.filter_list, size: 20),
+                ),
               ],
             ),
             if (provider.isSearching) ...[
@@ -73,10 +68,11 @@ class SearchRestaurantWidget extends StatelessWidget {
                     style: const TextStyle(fontWeight: FontWeight.normal),
                     children: [
                       TextSpan(
-                        text: (provider.state as RestaurantLoadedState)
-                            .restaurants
-                            .length
-                            .toString(),
+                        text:
+                            (provider.state as RestaurantLoadedState)
+                                .restaurants
+                                .length
+                                .toString(),
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                       TextSpan(text: ' results for "'),
@@ -87,7 +83,9 @@ class SearchRestaurantWidget extends StatelessWidget {
                       TextSpan(text: '"'),
                     ],
                   ),
-                )
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ] else if (provider.state is RestaurantEmptyState) ...[
                 Text.rich(
                   TextSpan(
@@ -101,8 +99,10 @@ class SearchRestaurantWidget extends StatelessWidget {
                       TextSpan(text: '"${provider.searchController.text}"'),
                     ],
                   ),
-                )
-              ]
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
             ],
           ],
         );

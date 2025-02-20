@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant_dicoding_app/constants/app_constants.dart';
@@ -48,12 +49,18 @@ class RestaurantGridItem extends StatelessWidget {
                     child: SizedBox(
                       height: MediaQuery.of(context).size.height * 0.2,
                       width: MediaQuery.of(context).size.width,
-                      child: Image.network(
-                        "$restaurantSmallImageUrl${restaurant.pictureId}",
+                      child: CachedNetworkImage(
+                        imageUrl:
+                            "$restaurantMediumImageUrl${restaurant.pictureId}",
                         fit: BoxFit.cover,
-                        loadingBuilder: (context, child, loadingProgress) {
-                          if (loadingProgress == null) return child;
+                        placeholder: (context, url) {
                           return LoadingImageWidget();
+                        },
+                        errorWidget: (context, url, error) {
+                          return Image.asset(
+                            "assets/images/placeholder.png",
+                            fit: BoxFit.cover,
+                          );
                         },
                       ),
                     ),
@@ -76,15 +83,11 @@ class RestaurantGridItem extends StatelessWidget {
                           maxLines: 1,
                         ),
                       ),
-                      Icon(
-                        Icons.star,
-                        color: Colors.amber,
-                        size: 15,
-                      ),
+                      Icon(Icons.star, color: Colors.amber, size: 15),
                       Text(
                         "${restaurant.rating}",
                         style: Theme.of(context).textTheme.bodySmall,
-                      )
+                      ),
                     ],
                   ),
                   Text(
@@ -101,15 +104,20 @@ class RestaurantGridItem extends StatelessWidget {
                   Expanded(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        minimumSize:
-                            Size(MediaQuery.of(context).size.width, 20),
+                        minimumSize: Size(
+                          MediaQuery.of(context).size.width,
+                          20,
+                        ),
                         fixedSize: Size(MediaQuery.of(context).size.width, 30),
                         padding: const EdgeInsets.all(0),
                       ),
                       child: const Text('View Details'),
                       onPressed: () {
-                        Navigator.pushNamed(context, AppRoutes.restaurantDetail,
-                            arguments: restaurant.id);
+                        Navigator.pushNamed(
+                          context,
+                          AppRoutes.restaurantDetail,
+                          arguments: restaurant.id,
+                        );
                       },
                     ),
                   ),
@@ -125,21 +133,22 @@ class RestaurantGridItem extends StatelessWidget {
                     ),
                   if (!showRemoveButton)
                     _ActionButton(
-                      icon: restaurant.isFavorite
-                          ? Icons.favorite
-                          : Icons.favorite_border,
+                      icon:
+                          restaurant.isFavorite
+                              ? Icons.favorite
+                              : Icons.favorite_border,
                       restaurant: restaurant,
                       onPressed: () {
-                        context
-                            .read<RestaurantProvider>()
-                            .toggleFavorite(restaurant);
+                        context.read<RestaurantProvider>().toggleFavorite(
+                          restaurant,
+                        );
                         context
                             .read<RestaurantFavoriteProvider>()
                             .getFavorites();
                       },
                     ),
                 ],
-              )
+              ),
             ],
           ),
         ),
@@ -167,9 +176,7 @@ class _ActionButton extends StatelessWidget {
       style: IconButton.styleFrom(
         minimumSize: Size(30, 30),
         fixedSize: Size(30, 30),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         padding: const EdgeInsets.all(0),
         visualDensity: VisualDensity.compact,
       ),
