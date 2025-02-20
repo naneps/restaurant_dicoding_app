@@ -22,6 +22,7 @@ class RestaurantFavoriteScreen extends StatelessWidget {
           },
           child: Consumer<RestaurantFavoriteProvider>(
             builder: (context, provider, child) {
+              provider.getFavorites();
               return RefreshIndicator(
                 onRefresh: () async {
                   provider.getFavorites();
@@ -37,9 +38,7 @@ class RestaurantFavoriteScreen extends StatelessWidget {
                       expandedHeight: 0,
                     ),
                     // Spacer kecil
-                    const SliverToBoxAdapter(
-                      child: SizedBox(height: 10),
-                    ),
+                    const SliverToBoxAdapter(child: SizedBox(height: 10)),
                     // Sliver Grid untuk menampilkan daftar restoran favorit
                     SliverPadding(
                       padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -56,13 +55,13 @@ class RestaurantFavoriteScreen extends StatelessWidget {
                                 return SliverGrid.builder(
                                   gridDelegate:
                                       SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount:
-                                        (constraints.crossAxisExtent ~/ 200)
-                                            .clamp(2, 10),
-                                    mainAxisExtent: 250,
-                                    crossAxisSpacing: 10,
-                                    mainAxisSpacing: 10,
-                                  ),
+                                        crossAxisCount:
+                                            (constraints.crossAxisExtent ~/ 200)
+                                                .clamp(2, 10),
+                                        mainAxisExtent: 250,
+                                        crossAxisSpacing: 10,
+                                        mainAxisSpacing: 10,
+                                      ),
                                   itemCount: state.restaurants.length,
                                   itemBuilder: (context, index) {
                                     final restaurant = state.restaurants[index];

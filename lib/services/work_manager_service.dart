@@ -25,9 +25,10 @@ void callbackDispatcher() {
           id: DateTime.now().millisecondsSinceEpoch.remainder(100000),
           title: "Recommended Restaurant: <b>${randomRestaurant.name}</b>",
           body: randomRestaurant.description ?? '',
-          payload: jsonEncode(
-            {'type': 'restaurant_detail', 'id': randomRestaurant.id},
-          ),
+          payload: jsonEncode({
+            'type': 'restaurant_detail',
+            'id': randomRestaurant.id,
+          }),
           imageUrl:
               '$restaurantSmallImageUrl${randomRestaurant.pictureId!}', // Tambahkan gambar restoran
           channelId: "1",
@@ -41,21 +42,22 @@ void callbackDispatcher() {
 
 class WorkManagerService {
   static void init() {
-    Workmanager().initialize(
-      callbackDispatcher,
-      isInDebugMode: false,
-    );
+    Workmanager().initialize(callbackDispatcher, isInDebugMode: false);
   }
 
   static void registerDailyTask() {
-    Workmanager().registerPeriodicTask(
+    final now = DateTime.now();
+    DateTime scheduleTime = DateTime(now.year, now.month, now.day, 11);
+    if (now.isAfter(scheduleTime)) {
+      scheduleTime = scheduleTime.add(const Duration(days: 1));
+    }
+
+    final duration = scheduleTime.difference(now);
+    Workmanager().registerOneOffTask(
       "fetch_restaurant_notification",
       fetchBackgroundTask,
-      frequency: const Duration(minutes: 15),
-      initialDelay: const Duration(seconds: 3),
-      constraints: Constraints(
-        networkType: NetworkType.connected,
-      ),
+      initialDelay: duration,
+      constraints: Constraints(networkType: NetworkType.connected),
       existingWorkPolicy: ExistingWorkPolicy.keep,
     );
   }

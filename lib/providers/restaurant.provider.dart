@@ -35,17 +35,20 @@ class RestaurantProvider extends ChangeNotifier {
       } else {
         final favoriteRestaurants = await favoriteService.getFavorites();
 
-        final markedRestaurants = result.map((restaurant) {
-          final isFavorite =
-              favoriteRestaurants.any((fav) => fav.id == restaurant.id);
-          return restaurant.copyWith(isFavorite: isFavorite);
-        }).toList();
+        final markedRestaurants =
+            result.map((restaurant) {
+              final isFavorite = favoriteRestaurants.any(
+                (fav) => fav.id == restaurant.id,
+              );
+              return restaurant.copyWith(isFavorite: isFavorite);
+            }).toList();
 
         _restaurantState = RestaurantLoadedState(markedRestaurants);
       }
     } catch (e) {
-      _restaurantState =
-          RestaurantErrorState('Failed to fetch restaurants: $e');
+      _restaurantState = RestaurantErrorState(
+        'Failed to fetch restaurants: $e',
+      );
     } finally {
       Future.delayed(const Duration(milliseconds: 1500), () {
         notifyListeners();
@@ -61,8 +64,9 @@ class RestaurantProvider extends ChangeNotifier {
 
   void searchRestaurants(String value) async {
     _restaurantState = RestaurantLoadingState();
-    notifyListeners();
     _isSearching = true;
+
+    notifyListeners();
 
     _debounce?.cancel();
 
@@ -80,8 +84,9 @@ class RestaurantProvider extends ChangeNotifier {
           _isSearching = false;
         }
       } catch (e) {
-        _restaurantState =
-            RestaurantErrorState('Failed to fetch restaurants: $e');
+        _restaurantState = RestaurantErrorState(
+          'Failed to fetch restaurants: $e',
+        );
       } finally {
         Future.delayed(const Duration(milliseconds: 500), () {
           notifyListeners();
@@ -100,17 +105,17 @@ class RestaurantProvider extends ChangeNotifier {
 
       final currentState = _restaurantState;
       if (currentState is RestaurantLoadedState) {
-        final updatedRestaurants = currentState.restaurants.map((r) {
-          if (r.id == restaurant.id) {
-            return r.copyWith(isFavorite: !restaurant.isFavorite);
-          }
-          return r;
-        }).toList();
+        final updatedRestaurants =
+            currentState.restaurants.map((r) {
+              if (r.id == restaurant.id) {
+                return r.copyWith(isFavorite: !restaurant.isFavorite);
+              }
+              return r;
+            }).toList();
 
         _restaurantState = RestaurantLoadedState(updatedRestaurants);
         notifyListeners();
       }
-    } catch (e) {
-    }
+    } catch (e) {}
   }
 }
