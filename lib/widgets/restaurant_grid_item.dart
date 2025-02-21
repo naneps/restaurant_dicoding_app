@@ -57,10 +57,7 @@ class RestaurantGridItem extends StatelessWidget {
                           return LoadingImageWidget();
                         },
                         errorWidget: (context, url, error) {
-                          return Image.asset(
-                            "assets/images/placeholder.png",
-                            fit: BoxFit.cover,
-                          );
+                          return Icon(Icons.image_outlined, size: 20);
                         },
                       ),
                     ),

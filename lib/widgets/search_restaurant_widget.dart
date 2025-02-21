@@ -62,45 +62,49 @@ class SearchRestaurantWidget extends StatelessWidget {
             ),
             if (provider.isSearching) ...[
               if (provider.state is RestaurantLoadedState) ...[
-                Text.rich(
-                  TextSpan(
-                    text: 'We found ',
-                    style: const TextStyle(fontWeight: FontWeight.normal),
-                    children: [
-                      TextSpan(
-                        text:
-                            (provider.state as RestaurantLoadedState)
-                                .restaurants
-                                .length
-                                .toString(),
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      TextSpan(text: ' results for "'),
-                      TextSpan(
-                        text: provider.searchController.text,
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      TextSpan(text: '"'),
-                    ],
+                Flexible(
+                  child: Text.rich(
+                    TextSpan(
+                      text: 'We found ',
+                      style: const TextStyle(fontWeight: FontWeight.normal),
+                      children: [
+                        TextSpan(
+                          text:
+                              (provider.state as RestaurantLoadedState)
+                                  .restaurants
+                                  .length
+                                  .toString(),
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        TextSpan(text: ' results for "'),
+                        TextSpan(
+                          text: provider.searchController.text,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        TextSpan(text: '"'),
+                      ],
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
                 ),
               ] else if (provider.state is RestaurantEmptyState) ...[
-                Text.rich(
-                  TextSpan(
-                    text: 'We found no results for "',
-                    style: TextStyle(fontWeight: FontWeight.normal),
-                    children: [
-                      TextSpan(
-                        text: '',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      TextSpan(text: '"${provider.searchController.text}"'),
-                    ],
+                Flexible(
+                  child: Text.rich(
+                    TextSpan(
+                      text: 'We found no results for "',
+                      style: TextStyle(fontWeight: FontWeight.normal),
+                      children: [
+                        TextSpan(
+                          text: '',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        TextSpan(text: '"${provider.searchController.text}"'),
+                      ],
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
                 ),
               ],
             ],
